@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -16,15 +16,41 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import {connect} from "react-redux";
+import loginActions from "../../../redux/actions/loginActions";
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+function LoginForm(props) {
   const navigate = useNavigate();
+
+  const [username,setUsername] = useState("")
+  const [password,setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false);
+  const [checkSubmit, setCheckSubmit] = useState(false);
+
+
+
+
+
+  useEffect(()=>{
+    if(username.split(" ").join("") !== "" && password.split(" ").join("") !== ""){
+      setCheckSubmit(true)
+    }else {
+      setCheckSubmit(false)
+    }
+  },[username,password])
+
+  const onChangeUsername = (e) =>{
+    setUsername(e.target.value)
+  }
+
+  const onChangePassword = (e) =>{
+    setPassword(e.target.value)
+  }
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    email: Yup.string().required('Username is required'),
     password: Yup.string().required('Password is required')
   });
 
@@ -36,9 +62,10 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+
     }
-  });
+  }
+  );
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
@@ -54,10 +81,10 @@ export default function LoginForm() {
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
+            label="Username"
             {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            value={username}
+            onChange={(e)=>{onChangeUsername(e)}}
           />
 
           <TextField
@@ -75,8 +102,8 @@ export default function LoginForm() {
                 </InputAdornment>
               )
             }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            value={password}
+            onChange={(e)=>{onChangePassword(e)}}
           />
         </Stack>
 
@@ -91,16 +118,47 @@ export default function LoginForm() {
           </Link>
         </Stack>
 
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          Login
-        </LoadingButton>
+        {
+          checkSubmit ?
+              <LoadingButton
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  loading={isSubmitting}
+                  onClick={()=>{
+                    console.log("XXXXXXXXx")
+                    props.login(username,password,()=>{})
+                  }}
+              >
+                Login
+              </LoadingButton>
+              :
+              <LoadingButton
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  disabled
+              >
+                Login
+              </LoadingButton>
+
+        }
       </Form>
     </FormikProvider>
   );
 }
+function mapStateToProps(state) {
+  return {}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    login:(username,password,callback) =>{
+      dispatch(loginActions.action.login(username,password,callback))
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(LoginForm)
+

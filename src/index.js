@@ -1,26 +1,40 @@
 // scroll bar
 import 'simplebar/src/simplebar.css';
-
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+
+// redux-saga
+import {Provider} from "react-redux";
+import {applyMiddleware, createStore} from "redux";
+import createSagaMiddleware from'redux-saga'
+import {composeWithDevTools} from "redux-devtools-extension";
 
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
+import rootReducer from "./redux/reducers/rootReducer";
+import rootSaga from "./redux/sagas/rootSaga";
 
 // ----------------------------------------------------------------------
 
+const sagaMiddleware=createSagaMiddleware()
+const store=createStore(rootReducer,composeWithDevTools(applyMiddleware(sagaMiddleware)))
+
+
 ReactDOM.render(
-  <HelmetProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </HelmetProvider>,
+    <Provider store={store}>
+        <HelmetProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </HelmetProvider>
+    </Provider>,
   document.getElementById('root')
 );
 
+sagaMiddleware.run(rootSaga)
 // If you want to enable client cache, register instead.
 serviceWorker.unregister();
 

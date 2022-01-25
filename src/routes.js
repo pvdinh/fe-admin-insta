@@ -1,5 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
+import React from "react";
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
@@ -10,6 +11,7 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
+import ProtectedRoute from "./ProtectedRoute";
 
 // ----------------------------------------------------------------------
 
@@ -20,10 +22,10 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" replace /> },
-        { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'app', element: <ProtectedRoute render={()=><DashboardApp />} /> },
+        { path: 'user', element: <ProtectedRoute render={()=><User />} /> },
+        { path: 'products', element:  <ProtectedRoute render={()=><Products />} /> },
+        { path: 'blog', element:  <ProtectedRoute render={()=><Blog />} /> }
       ]
     },
     {
