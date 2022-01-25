@@ -1,5 +1,6 @@
 const type = {
     LOGIN: "LOGIN",
+    LOGOUT: "LOGOUT",
 }
 const action = {
     login: (username, password, callback) => ({
@@ -9,6 +10,9 @@ const action = {
             password,
         },
         callback,
+    }),
+    logout: () => ({
+        type: type.LOGOUT,
     }),
 }
 export default {type, action}

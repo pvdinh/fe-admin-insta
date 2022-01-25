@@ -8,9 +8,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 // components
+import {connect} from "react-redux";
 import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';
+import loginActions from "../../redux/actions/loginActions";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+function AccountPopover(props) {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
@@ -110,7 +112,7 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" variant="outlined" onClick={()=>{props.logout()}}>
             Logout
           </Button>
         </Box>
@@ -118,3 +120,17 @@ export default function AccountPopover() {
     </>
   );
 }
+function mapStateToProps(state) {
+  return {}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    logout:() =>{
+      dispatch(loginActions.action.logout())
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(AccountPopover)
+
+

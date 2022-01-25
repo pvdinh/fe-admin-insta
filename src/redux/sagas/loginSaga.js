@@ -19,8 +19,19 @@ function *login_saga(action) {
     }
 }
 
+// eslint-disable-next-line camelcase
+function *logout_saga() {
+    try {
+        yield localStorage.removeItem("sessionTokenAdmin")
+        window.location.href = "/login"
+    }catch (e) {
+        console.log('err',e)
+    }
+}
+
 function *listen() {
     yield takeEvery(loginActions.type.LOGIN,login_saga)
+    yield takeEvery(loginActions.type.LOGOUT,logout_saga)
 }
 function *loginSaga() {
     yield all([listen()])
