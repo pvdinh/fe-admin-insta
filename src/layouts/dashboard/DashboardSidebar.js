@@ -5,6 +5,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
 // components
+import {connect} from "react-redux";
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -12,6 +13,7 @@ import { MHidden } from '../../components/@material-extend';
 //
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
+import loginActions from "../../redux/actions/loginActions";
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +41,7 @@ DashboardSidebar.propTypes = {
   onCloseSidebar: PropTypes.func
 };
 
-export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+function DashboardSidebar({ isOpenSidebar, onCloseSidebar, userAccountProfile }) {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -65,10 +67,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={userAccountProfile.profilePhoto} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {userAccountProfile.username}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}
@@ -115,3 +117,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     </RootStyle>
   );
 }
+function mapStateToProps(state) {
+  return {
+    userAccountProfile:state.home.userAccountProfile,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {}
+}
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardSidebar)

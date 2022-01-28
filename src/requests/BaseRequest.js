@@ -70,7 +70,15 @@ export default class BaseRequest {
                     statusCode: response.data.statusCode,
                     data: response.data.message,
                 }
-            } return {
+            }
+            if(response.data.total !== undefined){
+                return {
+                    statusCode: response.data.statusCode,
+                    data: response.data.data,
+                    total:response.data.total,
+                }
+            }
+            return {
                 statusCode: response.data.statusCode,
                 data: response.data.data,
             }

@@ -11,6 +11,7 @@ import createSagaMiddleware from'redux-saga'
 import {composeWithDevTools} from "redux-devtools-extension";
 
 //
+import React from "react";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';

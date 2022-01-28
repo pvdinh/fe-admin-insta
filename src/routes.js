@@ -11,7 +11,8 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
-import ProtectedRoute from "./ProtectedRoute";
+import FeedbackComponent from "./components/feedback/FeedbackComponent";
+import ReportComponent from "./components/report/ReportComponent";
 
 // ----------------------------------------------------------------------
 
@@ -21,11 +22,13 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" replace /> },
-        { path: 'app', element: <ProtectedRoute render={()=><DashboardApp />} /> },
-        { path: 'user', element: <ProtectedRoute render={()=><User />} /> },
-        { path: 'products', element:  <ProtectedRoute render={()=><Products />} /> },
-        { path: 'blog', element:  <ProtectedRoute render={()=><Blog />} /> }
+        { path: '', element: localStorage.getItem("sessionTokenAdmin") ? <DashboardApp /> : <Navigate to="/login"/>},
+        { path: 'app', element: localStorage.getItem("sessionTokenAdmin") ? <DashboardApp /> : <Navigate to="/login"/>},
+        { path: 'user', element: localStorage.getItem("sessionTokenAdmin") ? <User /> : <Navigate to="/login"/> },
+        { path: 'products', element:  localStorage.getItem("sessionTokenAdmin") ? <Products /> : <Navigate to="/login"/> },
+        { path: 'blog', element:  localStorage.getItem("sessionTokenAdmin") ? <Blog /> : <Navigate to="/login"/> },
+        { path: 'feedback', element:  localStorage.getItem("sessionTokenAdmin") ? <FeedbackComponent /> : <Navigate to="/login"/> },
+        { path: 'report', element:  localStorage.getItem("sessionTokenAdmin") ? <ReportComponent /> : <Navigate to="/login"/> },
       ]
     },
     {

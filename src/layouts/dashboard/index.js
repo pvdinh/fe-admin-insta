@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 //
+import {connect} from "react-redux";
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import homeActions from "../../redux/actions/homeActions";
+import {axiosJwt} from "../../axios/axiosConfig";
 
 // ----------------------------------------------------------------------
 
@@ -32,8 +35,17 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout() {
+function DashboardLayout(props) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    axiosJwt.get(`http://localhost:8080/api/v1/user-account-setting/get`).then((res) => {
+      props.getUserAccountProfile(() => {
+      })
+    }).catch((err) => {
+      console.log('err', err)
+    })
+  }, [])
 
   return (
     <RootStyle>
@@ -45,3 +57,18 @@ export default function DashboardLayout() {
     </RootStyle>
   );
 }
+function mapStateToProps(state) {
+  return {
+    userAccountProfile:state.home.userAccountProfile,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getUserAccountProfile:(callback) =>{
+      dispatch(homeActions.action.getUserAccountProfile(callback))
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(DashboardLayout)
+

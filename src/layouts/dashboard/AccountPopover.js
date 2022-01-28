@@ -69,7 +69,7 @@ function AccountPopover(props) {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={props.userAccountProfile.profilePhoto} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -80,10 +80,7 @@ function AccountPopover(props) {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {props.userAccountProfile.username}
           </Typography>
         </Box>
 
@@ -121,7 +118,9 @@ function AccountPopover(props) {
   );
 }
 function mapStateToProps(state) {
-  return {}
+  return {
+    userAccountProfile:state.home.userAccountProfile,
+  }
 }
 
 function mapDispatchToProps(dispatch) {

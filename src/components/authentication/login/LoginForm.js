@@ -157,7 +157,7 @@ function mapDispatchToProps(dispatch) {
   return {
     login:(username,password,callback) =>{
       dispatch(loginActions.action.login(username,password,callback))
-    }
+    },
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(LoginForm)
