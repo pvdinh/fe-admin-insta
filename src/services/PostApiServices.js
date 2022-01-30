@@ -14,3 +14,8 @@ export const getAllUserSavedPost = (pId) =>{
     const postRequest = new PostRequest()
     return postRequest.getAllUserSavedPost(pId)
 }
+
+export const getAllUserLikedPost = (pId) =>{
+    const postRequest = new PostRequest()
+    return postRequest.getAllUserLikedPost(pId)
+}

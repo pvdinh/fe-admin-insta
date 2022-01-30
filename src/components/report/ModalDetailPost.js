@@ -18,6 +18,7 @@ import SvgIconStyle from "../SvgIconStyle";
 import {fShortenNumber} from "../../utils/formatNumber";
 import postActions from "../../redux/actions/postActions";
 import ModalDisplayListUser from "../Modal/ModalDisplayListUser";
+import ModalDisplayListUserCommented from "../Modal/ModalDisplayListUserCommented";
 
 const CardMediaStyle = styled('div')({
     position: 'relative',
@@ -76,9 +77,11 @@ function ModalDetailPost(props) {
     const [userAccountSetting, setUserAccountSetting] = useState({})
     const [listComment, setListComment] = useState([])
     const [listUserSavedPost, setListUserSavedPost] = useState([])
+    const [listUserLikedPost, setListUserLikedPost] = useState([])
     const [listUser,setListUser] = useState([])
     const [type,setType] = useState([])
     const [visibleModal,setVisibleModal] = useState(false)
+    const [visibleModalComment,setVisibleModalComment] = useState(false)
 
     useEffect(() => {
         props.getPostInformationFromPId(props.pId, (data) => {
@@ -93,12 +96,25 @@ function ModalDetailPost(props) {
         props.getAllUserSavedPost(props.pId, (data) => {
             setListUserSavedPost(data)
         })
+
+        props.getAllUserLikedPost(props.pId, (data) => {
+            setListUserLikedPost(data)
+        })
     }, [props.pId])
 
     const showModal = () =>{
         if(visibleModal){
             return(
                 <ModalDisplayListUser list={listUser} type={type} visible={visibleModal} setVisible={()=>{setVisibleModal(false)}}  />
+            )
+        }
+    }
+
+
+    const showModalComment = () =>{
+        if(visibleModalComment){
+            return(
+                <ModalDisplayListUserCommented list={listUser} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
             )
         }
     }
@@ -153,7 +169,7 @@ function ModalDetailPost(props) {
                                             alt="img"
                                             src={userAccountSetting.profilePhoto}
                                         />
-                                        <ReactPlayer muted playing height="400px" width="700"
+                                        <ReactPlayer muted playing height="450px" width="700"
                                                      controls url={post.videoPath}
                                                      light={post.imagePath !== "" ? post.imagePath : ""}
                                         />
@@ -200,10 +216,10 @@ function ModalDetailPost(props) {
                                             ml: 0,
                                         }}
                                         style={{cursor: "pointer"}}
-                                        onClick={()=>{setType(1);setVisibleModal(true)}}
+                                        onClick={()=>{setListUser(listUserLikedPost);setType(1);setVisibleModal(true)}}
                                     >
                                         <Box component={Icon} icon={heartFill} sx={{width: 16, height: 16, mr: 0.5}}/>
-                                        <Typography variant="caption">{fShortenNumber(post.likes !== undefined ? post.likes.length : 0)}</Typography>
+                                        <Typography variant="caption">{fShortenNumber(listUserLikedPost.length)}</Typography>
                                     </Box>
                                     <Box
                                         sx={{
@@ -212,7 +228,7 @@ function ModalDetailPost(props) {
                                             ml: 1.5,
                                         }}
                                         style={{cursor: "pointer"}}
-                                        onClick={()=>{setVisibleModal(true)}}
+                                        onClick={()=>{setListUser(listComment);setVisibleModalComment(true)}}
                                     >
                                         <Box component={Icon} icon={messageCircleFill}
                                              sx={{width: 16, height: 16, mr: 0.5}}/>
@@ -241,6 +257,9 @@ function ModalDetailPost(props) {
             {
                 showModal()
             }
+            {
+                showModalComment()
+            }
         </div>
     )
 }
@@ -259,6 +278,9 @@ function mapDispatchToProps(dispatch) {
         },
         getAllUserSavedPost: (pId, callback) => {
             dispatch(postActions.action.getAllUserSavedPost(pId, callback))
+        },
+        getAllUserLikedPost: (pId, callback) => {
+            dispatch(postActions.action.getAllUserLikedPost(pId, callback))
         },
     }
 }

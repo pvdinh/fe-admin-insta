@@ -15,5 +15,10 @@ class PostRequest extends BaseRequest{
         const url = `admin/manage-post/${pId}/get-user-saved`
         return this.get(url)
     }
+
+    getAllUserLikedPost(pId){
+        const url = `admin/manage-post/${pId}/get-user-liked`
+        return this.get(url)
+    }
 }
 export default PostRequest

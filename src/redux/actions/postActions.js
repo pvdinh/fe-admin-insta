@@ -5,6 +5,8 @@ const type={
     GET_ALL_COMMENT_IN_POST_SUCCESS:"GET_ALL_COMMENT_IN_POST_SUCCESS",
     GET_ALL_USER_SAVED_POST:"GET_ALL_USER_SAVED_POST",
     GET_ALL_USER_SAVED_POST_SUCCESS:"GET_ALL_USER_SAVED_POST_SUCCESS",
+    GET_ALL_USER_LIKED_POST:"GET_ALL_USER_LIKED_POST",
+    GET_ALL_USER_LIKED_POST_SUCCESS:"GET_ALL_USER_LIKED_POST_SUCCESS",
 }
 const action={
     getPostInformationFromPId: (pid,callback) =>({
@@ -19,6 +21,11 @@ const action={
     }),
     getAllUserSavedPost:(pId,callback) =>({
         type:type.GET_ALL_USER_SAVED_POST,
+        id:pId,
+        callback,
+    }),
+    getAllUserLikedPost:(pId,callback) =>({
+        type:type.GET_ALL_USER_LIKED_POST,
         id:pId,
         callback,
     }),
