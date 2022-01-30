@@ -25,6 +25,7 @@ import reportActions from "../../redux/actions/reportActions";
 import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
 import FeedbackListToolbar from "../feedback/FeedbackListToolbar";
 import ReportListToolbar from "./ReportListToolbar";
+import ModalDetailPost from "./ModalDetailPost";
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,9 @@ function ReportComponent(props) {
     const [search, setSearch] = useState("")
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [visible,setVisible] = useState(false)
+    const [visibleModalDetailPost,setVisibleModalDetailPost] = useState(false)
     const [uIdClick,setUIdClick] = useState("")
+    const [pIdClick,setPIdClick] = useState("")
 
     useEffect(() => {
         console.log(type)
@@ -100,6 +103,14 @@ function ReportComponent(props) {
         }
     }
 
+    const showModalDetailPost = () =>{
+        if(pIdClick !== ""){
+            return(
+                <ModalDetailPost pId={pIdClick} visible={visibleModalDetailPost} setVisible={()=>{setVisibleModalDetailPost(false)}} />
+            )
+        }
+    }
+
     return (
         <Page title="User | Minimal-UI">
             <Container>
@@ -131,7 +142,7 @@ function ReportComponent(props) {
                                                 key={id}
                                             >
                                                 <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>{setUIdClick(idUser);setVisible(true)}}>{idUser}</TableCell>
-                                                <TableCell align="left">{idPost}</TableCell>
+                                                <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>{setPIdClick(idPost);setVisibleModalDetailPost(true)}}>{idPost}</TableCell>
                                                 <TableCell align="left">{reportContent}</TableCell>
                                                 <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
 
@@ -164,6 +175,9 @@ function ReportComponent(props) {
             </Container>
             {
                 showModalUserAccountSetting()
+            }
+            {
+                showModalDetailPost()
             }
         </Page>
     );

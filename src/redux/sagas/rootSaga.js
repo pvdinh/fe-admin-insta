@@ -4,7 +4,8 @@ import loginSaga from "./loginSaga";
 import homeSaga from "./homeSaga";
 import userAccountSaga from "./userAccountSaga";
 import reportSaga from "./reportSaga";
+import postSaga from "./postSaga";
 
 export default function* rootSaga () {
-    yield all([feedbackSaga(),loginSaga(),homeSaga(),userAccountSaga(),reportSaga(),])
+    yield all([feedbackSaga(),loginSaga(),homeSaga(),userAccountSaga(),reportSaga(),postSaga(),])
 }

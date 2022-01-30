@@ -45,8 +45,6 @@ function FeedbackComponent(props) {
     const [uIdClick,setUIdClick] = useState("")
 
     useEffect(() => {
-        console.log(type)
-        console.log(search)
         if (type === 1) {
             const payload = {
                 search, page, size: rowsPerPage,
