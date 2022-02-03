@@ -35,7 +35,6 @@ function ModalUserAccountSetting(props) {
                 props.setVisible()
             }}>
                 <Card sx={style}>
-                    <CardActionArea>
                         <CardMedia
                             component="img"
                             height="300"
@@ -62,7 +61,6 @@ function ModalUserAccountSetting(props) {
                                 Posts: {userAccountSetting.posts} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; followers: {userAccountSetting.followers} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; following: {userAccountSetting.following}
                             </Typography>
                         </CardContent>
-                    </CardActionArea>
                 </Card>
             </Modal>
         </div>

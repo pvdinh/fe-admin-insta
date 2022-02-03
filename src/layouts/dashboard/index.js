@@ -8,6 +8,7 @@ import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 import homeActions from "../../redux/actions/homeActions";
 import {axiosJwt} from "../../axios/axiosConfig";
+import {BASE_URL} from "../../url";
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ function DashboardLayout(props) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    axiosJwt.get(`http://localhost:8080/api/v1/user-account-setting/get`).then((res) => {
+    axiosJwt.get(`${BASE_URL}/api/v1/user-account-setting/get`).then((res) => {
       props.getUserAccountProfile(() => {
       })
     }).catch((err) => {

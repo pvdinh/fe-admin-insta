@@ -19,6 +19,7 @@ import {fShortenNumber} from "../../utils/formatNumber";
 import postActions from "../../redux/actions/postActions";
 import ModalDisplayListUser from "../Modal/ModalDisplayListUser";
 import ModalDisplayListUserCommented from "../Modal/ModalDisplayListUserCommented";
+import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
 
 const CardMediaStyle = styled('div')({
     position: 'relative',
@@ -80,8 +81,10 @@ function ModalDetailPost(props) {
     const [listUserLikedPost, setListUserLikedPost] = useState([])
     const [listUser,setListUser] = useState([])
     const [type,setType] = useState([])
+
     const [visibleModal,setVisibleModal] = useState(false)
     const [visibleModalComment,setVisibleModalComment] = useState(false)
+    const [visibleModalUserAST,setVisibleModalUserAST] = useState(false)
 
     useEffect(() => {
         props.getPostInformationFromPId(props.pId, (data) => {
@@ -115,6 +118,14 @@ function ModalDetailPost(props) {
         if(visibleModalComment){
             return(
                 <ModalDisplayListUserCommented list={listUser} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
+            )
+        }
+    }
+
+    const showModalUserAST = () =>{
+        if(visibleModalUserAST){
+            return(
+                <ModalUserAccountSetting uId={userAccountSetting.id} visible={visibleModalUserAST} setVisible={()=>{setVisibleModalUserAST(false)}} />
             )
         }
     }
@@ -181,13 +192,23 @@ function ModalDetailPost(props) {
                             <CardContent
                             >
                                 <TitleStyle
-                                    to="#"
                                     color="inherit"
                                     variant="subtitle2"
-                                    underline="hover"
-                                    component={RouterLink}
+                                    underline="none"
+                                    style={{cursor:"pointer"}}
+                                    onClick={()=>{
+                                        setVisibleModalUserAST(true)
+                                    }}
                                 >
                                     {userAccountSetting.username}
+                                </TitleStyle>
+
+                                <TitleStyle
+                                    color="inherit"
+                                    variant="subtitle2"
+                                    underline="none"
+                                >
+                                    {post.id !== undefined ? post.id : ""}
                                 </TitleStyle>
 
                                 <Typography
@@ -199,11 +220,8 @@ function ModalDetailPost(props) {
                                 </Typography>
 
                                 <TitleStyle
-                                    to="#"
                                     color="inherit"
                                     variant="subtitle2"
-                                    underline="hover"
-                                    component={RouterLink}
                                 >
                                     {post.caption}
                                 </TitleStyle>
@@ -259,6 +277,9 @@ function ModalDetailPost(props) {
             }
             {
                 showModalComment()
+            }
+            {
+                showModalUserAST()
             }
         </div>
     )

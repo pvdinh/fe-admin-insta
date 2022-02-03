@@ -19,3 +19,13 @@ export const getAllUserLikedPost = (pId) =>{
     const postRequest = new PostRequest()
     return postRequest.getAllUserLikedPost(pId)
 }
+
+export const getAllPost = (payload) =>{
+    const postRequest = new PostRequest()
+    return postRequest.getAllPost(payload)
+}
+
+export const searchPost = (payload) =>{
+    const postRequest = new PostRequest()
+    return postRequest.searchPost(payload)
+}

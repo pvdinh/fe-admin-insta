@@ -11,10 +11,14 @@ import {
     Container,
     Typography,
     TableContainer,
-    TablePagination
+    TablePagination, Box
 } from '@mui/material';
 // components
 import {connect} from "react-redux";
+import copyFill from '@iconify/icons-eva/copy-fill';
+import {Icon} from "@iconify/react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from '@mui/material/Alert';
 import Page from "../Page";
 import Scrollbar from '../Scrollbar';
 import {UserListHead, UserListToolbar, UserMoreMenu} from '../_dashboard/user';
@@ -23,11 +27,12 @@ import {fDateTimeSuffix} from "../../utils/formatTime";
 import {axiosJwt} from "../../axios/axiosConfig";
 import reportActions from "../../redux/actions/reportActions";
 import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
-import FeedbackListToolbar from "../feedback/FeedbackListToolbar";
 import ReportListToolbar from "./ReportListToolbar";
 import ModalDetailPost from "./ModalDetailPost";
-
+import {BASE_URL} from "../../url";
 // ----------------------------------------------------------------------
+
+const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
 
 const TABLE_HEAD = [
     {id: 'idUser', label: 'idUser', alignRight: false},
@@ -48,6 +53,10 @@ function ReportComponent(props) {
     const [uIdClick,setUIdClick] = useState("")
     const [pIdClick,setPIdClick] = useState("")
 
+
+    const [alert, setAlert] = React.useState(false);
+
+
     useEffect(() => {
         console.log(type)
         console.log(search)
@@ -66,7 +75,7 @@ function ReportComponent(props) {
     }, [page, rowsPerPage])
 
     useEffect(() => {
-        axiosJwt.get(`http://localhost:8080/api/v1/admin/manage-report`).then((res) => {
+        axiosJwt.get(`${BASE_URL}/api/v1/admin/manage-report`).then((res) => {
             props.getReport({page, size: rowsPerPage}, (data) => {
                 setTotal(data.total)
             })
@@ -74,6 +83,18 @@ function ReportComponent(props) {
             console.log('err', err)
         })
     }, [])
+
+    const handleClick = () => {
+        setAlert(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setAlert(false);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -111,6 +132,12 @@ function ReportComponent(props) {
         }
     }
 
+    const onCopy = (s,e) =>{
+        navigator.clipboard.writeText(s)
+        handleClick()
+        e.stopPropagation();
+    }
+
     return (
         <Page title="User | Minimal-UI">
             <Container>
@@ -141,8 +168,20 @@ function ReportComponent(props) {
                                                 hover
                                                 key={id}
                                             >
-                                                <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>{setUIdClick(idUser);setVisible(true)}}>{idUser}</TableCell>
-                                                <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>{setPIdClick(idPost);setVisibleModalDetailPost(true)}}>{idPost}</TableCell>
+                                                <TableCell style={{cursor: "pointer"}} align="left" onClick={() => {
+                                                    setUIdClick(idUser);
+                                                    setVisible(true)
+                                                }}>{idUser} <Box component={Icon} icon={copyFill}
+                                                                 sx={{width: 20, height: 20, ml: 0.5}} onClick={(e) => {
+                                                    onCopy(idUser,e)
+                                                }}/></TableCell>
+                                                <TableCell style={{cursor: "pointer"}} align="left" onClick={() => {
+                                                    setPIdClick(idPost);
+                                                    setVisibleModalDetailPost(true)
+                                                }}>{idPost} <Box component={Icon} icon={copyFill}
+                                                                 sx={{width: 20, height: 20, ml: 0.5}} onClick={(e) => {
+                                                    onCopy(idPost,e)
+                                                }}/></TableCell>
                                                 <TableCell align="left">{reportContent}</TableCell>
                                                 <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
 
@@ -179,6 +218,11 @@ function ReportComponent(props) {
             {
                 showModalDetailPost()
             }
+            <Snackbar open={alert} autoHideDuration={4000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Copied!
+                </Alert>
+            </Snackbar>
         </Page>
     );
 }

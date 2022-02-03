@@ -20,5 +20,15 @@ class PostRequest extends BaseRequest{
         const url = `admin/manage-post/${pId}/get-user-liked`
         return this.get(url)
     }
+
+    getAllPost(payload){
+        const url = `admin/manage-post/get-all-post?filter=${payload.filter}&page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
+
+    searchPost(payload){
+        const url = `admin/manage-post/${payload.search}/search?page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
 }
 export default PostRequest

@@ -11,10 +11,14 @@ import {
     Container,
     Typography,
     TableContainer,
-    TablePagination
+    TablePagination, Box
 } from '@mui/material';
 // components
 import {connect} from "react-redux";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import copyFill from "@iconify/icons-eva/copy-fill";
+import {Icon} from "@iconify/react";
 import Page from "../Page";
 import Scrollbar from '../Scrollbar';
 import {UserListHead, UserListToolbar, UserMoreMenu} from '../_dashboard/user';
@@ -24,6 +28,10 @@ import {fDateTimeSuffix} from "../../utils/formatTime";
 import {axiosJwt} from "../../axios/axiosConfig";
 import FeedbackListToolbar from "./FeedbackListToolbar";
 import ModalUserAccountSetting from "./ModalUserAccountSetting";
+import {BASE_URL} from "../../url";
+
+
+const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +52,8 @@ function FeedbackComponent(props) {
     const [visible,setVisible] = useState(false)
     const [uIdClick,setUIdClick] = useState("")
 
+    const [alert, setAlert] = React.useState(false);
+
     useEffect(() => {
         if (type === 1) {
             const payload = {
@@ -60,7 +70,7 @@ function FeedbackComponent(props) {
     }, [page, rowsPerPage])
 
     useEffect(() => {
-        axiosJwt.get(`http://localhost:8080/api/v1/admin/manage-feedback`).then((res) => {
+        axiosJwt.get(`${BASE_URL}/api/v1/admin/manage-feedback`).then((res) => {
             props.getFeedback({page, size: rowsPerPage}, (data) => {
                 setTotal(data.total)
             })
@@ -68,6 +78,18 @@ function FeedbackComponent(props) {
             console.log('err', err)
         })
     }, [])
+
+    const handleClick = () => {
+        setAlert(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setAlert(false);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -95,6 +117,12 @@ function FeedbackComponent(props) {
                 <ModalUserAccountSetting uId={uIdClick} visible={visible} setVisible={()=>{setVisible(false)}} />
             )
         }
+    }
+
+    const onCopy = (s,e) =>{
+        navigator.clipboard.writeText(s)
+        handleClick()
+        e.stopPropagation();
     }
 
     return (
@@ -127,16 +155,21 @@ function FeedbackComponent(props) {
                                                 hover
                                                 key={id}
                                             >
-                                                <TableCell style={{cursor:"pointer"}} align="left" onClick={()=>{setUIdClick(idUser);setVisible(true)}}>{idUser}</TableCell>
-                                                <TableCell align="left">{subject}</TableCell>
-                                                <TableCell align="left">{content}</TableCell>
-                                                <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
+                                                <TableCell style={{cursor: "pointer"}} align="left" onClick={() => {
+                                                    setUIdClick(idUser);
+                                                    setVisible(true)
+                                                }}>{idUser} <Box component={Icon} icon={copyFill}
+                                                                 sx={{width: 20, height: 20, ml: 0.5}} onClick={(e) => {
+                                                    onCopy(idUser, e)}} /> </TableCell>
+                                                    <TableCell align="left">{subject}</TableCell>
+                                                    <TableCell align="left">{content}</TableCell>
+                                                    <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
 
-                                                <TableCell align="right">
-                                                    <UserMoreMenu/>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
+                                                    <TableCell align="right">
+                                                        <UserMoreMenu/>
+                                                    </TableCell>
+                                                </TableRow>
+                                                );
                                     })}
                                     {emptyRows > 0 && (
                                         <TableRow style={{height: 53 * emptyRows}}>
@@ -162,6 +195,11 @@ function FeedbackComponent(props) {
             {
                 showModalUserAccountSetting()
             }
+            <Snackbar open={alert} autoHideDuration={4000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Copied!
+                </Alert>
+            </Snackbar>
         </Page>
     );
 }
