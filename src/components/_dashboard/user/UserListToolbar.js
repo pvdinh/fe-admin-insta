@@ -14,6 +14,10 @@ import {
   OutlinedInput,
   InputAdornment
 } from '@mui/material';
+import {connect} from "react-redux";
+import {useState} from "react";
+import reportActions from "../../../redux/actions/reportActions";
+import userAccountActions from "../../../redux/actions/userAccountActions";
 
 // ----------------------------------------------------------------------
 
@@ -39,52 +43,63 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {
-  numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func
-};
+function UserListToolbar(props) {
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+  const [search,setSearch] = useState("")
+
+  const onSearch = (e) =>{
+    setSearch(e.target.value)
+    if(e.target.value.split(" ").join("") !== ""){
+      const payload = {
+        search: e.target.value, page: props.page, size: props.size,
+      }
+      props.searchUser(payload, (data) => {
+        props.resultTotalSearch(data.total)
+        props.setOnTypeFilerReport(e.target.value,1)
+      })
+    }else {
+      props.getAllUser({page: 0, size: props.size}, (data) => {
+        props.resultTotalSearch(data.total)
+        props.setOnTypeFilerReport("",0)
+      })
+    }
+  }
+
   return (
-    <RootStyle
-      sx={{
-        ...(numSelected > 0 && {
-          color: 'primary.main',
-          bgcolor: 'primary.lighter'
-        })
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
+      <RootStyle>
         <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search user..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          }
+            value={search}
+            onChange={(e) => {
+              onSearch(e)
+            }}
+            placeholder="Search user by username or id..."
+            startAdornment={
+              <InputAdornment position="start">
+                <Box component={Icon} icon={searchFill} sx={{color: 'text.disabled'}}/>
+              </InputAdornment>
+            }
         />
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
-      ) : (
         <Tooltip title="Filter list">
           <IconButton>
-            <Icon icon={roundFilterList} />
+            <Icon icon={roundFilterList}/>
           </IconButton>
         </Tooltip>
-      )}
-    </RootStyle>
+      </RootStyle>
   );
 }
+function mapStateToProps(state) {
+  return {}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getAllUser:(payload,callback)=>{
+      dispatch(userAccountActions.action.getAllUser(payload,callback))
+    },
+    searchUser:(payload,callback)=>{
+      dispatch(userAccountActions.action.searchUser(payload,callback))
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserListToolbar)

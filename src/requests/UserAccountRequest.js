@@ -5,5 +5,15 @@ class UserAccountRequest extends BaseRequest{
         const url = `admin/manage-user/${uId}/user-account-setting`
         return this.get(url)
     }
+
+    getAllUser(payload){
+        const url = `admin/manage-user?page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
+
+    searchUser(payload){
+        const url = `admin/manage-user/${payload.search}/search?page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
 }
 export default UserAccountRequest
