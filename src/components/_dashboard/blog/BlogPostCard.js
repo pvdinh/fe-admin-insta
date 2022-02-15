@@ -9,6 +9,7 @@ import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
 // utils
 //
+import LazyLoad from 'react-lazyload'
 import ReactPlayer from "react-player";
 import heartFill from "@iconify/icons-eva/heart-fill";
 import bookmarkFill from "@iconify/icons-eva/bookmark-fill";
@@ -158,12 +159,15 @@ function BlogPostCard(props) {
                                   position: 'absolute',
                               }}
                           />
-                          <AvatarStyle
-                              alt="img"
-                              src={userAccountSetting.profilePhoto}
-                          />
-                          <CoverImgStyle alt='image' src={post.imagePath}/>
-
+                          <LazyLoad>
+                              <AvatarStyle
+                                  alt="img"
+                                  src={userAccountSetting.profilePhoto}
+                              />
+                          </LazyLoad>
+                          <LazyLoad>
+                              <CoverImgStyle style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}} alt='image' src={post.imagePath}/>
+                          </LazyLoad>
 
                       </CardMediaStyle>
                       :
@@ -180,10 +184,12 @@ function BlogPostCard(props) {
                                   position: 'absolute',
                               }}
                           />
-                          <AvatarStyle
-                              alt="img"
-                              src={userAccountSetting.profilePhoto}
-                          />
+                          <LazyLoad>
+                              <AvatarStyle
+                                  alt="img"
+                                  src={userAccountSetting.profilePhoto}
+                              />
+                          </LazyLoad>
                           <ReactPlayer muted playing height="182px" width="700"
                                        controls url={post.videoPath}
                                        light={post.imagePath !== "" ? post.imagePath : ""}
@@ -211,6 +217,7 @@ function BlogPostCard(props) {
                       color="inherit"
                       variant="subtitle2"
                       underline="none"
+                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
                   >
                       {post.id !== undefined ? post.id : ""}
                   </TitleStyle>
@@ -219,6 +226,7 @@ function BlogPostCard(props) {
                       gutterBottom
                       variant="caption"
                       sx={{color: 'text.disabled', display: 'block'}}
+                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
                   >
                       {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
                   </Typography>
@@ -229,6 +237,7 @@ function BlogPostCard(props) {
                       variant="subtitle2"
                       underline="hover"
                       component={RouterLink}
+                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
                   >
                       {post.caption}
                   </TitleStyle>

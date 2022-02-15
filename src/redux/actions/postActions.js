@@ -13,6 +13,12 @@ const type = {
     GET_ALL_POST_SUCCESS: "GET_ALL_POST_SUCCESS",
     SEARCH_POST: "SEARCH_POST",
     SEARCH_POST_SUCCESS: "SEARCH_POST_SUCCESS",
+    BLOCK_POST: "BLOCK_POST",
+    BLOCK_POST_SUCCESS: "BLOCK_POST_SUCCESS",
+    UN_BLOCK_POST: "UN_BLOCK_POST",
+    UN_BLOCK_POST_SUCCESS: "UN_BLOCK_POST_SUCCESS",
+    GET_POST_BLOCK_BY_ID: "GET_POST_BLOCK_BY_ID",
+    GET_POST_BLOCK_BY_ID_SUCCESS: "GET_POST_BLOCK_BY_ID_SUCCESS",
 }
 const action = {
     getPostInformationFromPId: (pid, callback) => ({
@@ -48,6 +54,21 @@ const action = {
     searchPost: (payload, callback) => ({
         type: type.SEARCH_POST,
         payload,
+        callback,
+    }),
+    blockPost: (pId, callback) => ({
+        type: type.BLOCK_POST,
+        id: pId,
+        callback,
+    }),
+    unBlockPost: (pId, callback) => ({
+        type: type.UN_BLOCK_POST,
+        id: pId,
+        callback,
+    }),
+    getPostBlockByPostId: (pId, callback) => ({
+        type: type.GET_POST_BLOCK_BY_ID,
+        id: pId,
         callback,
     }),
 }

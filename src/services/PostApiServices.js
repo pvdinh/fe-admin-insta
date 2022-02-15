@@ -29,3 +29,18 @@ export const searchPost = (payload) =>{
     const postRequest = new PostRequest()
     return postRequest.searchPost(payload)
 }
+
+export const blockPost = (pId) =>{
+    const postRequest = new PostRequest()
+    return postRequest.blockPost(pId)
+}
+
+export const unBlockPost = (pId) =>{
+    const postRequest = new PostRequest()
+    return postRequest.unBlockPost(pId)
+}
+
+export const getPostBlockByPostId = (pId) =>{
+    const postRequest = new PostRequest()
+    return postRequest.getPostBlockByPostId(pId)
+}

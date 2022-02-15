@@ -41,12 +41,12 @@ function FeedbackMoreMenu(props) {
                     <ListItemText primary="Delete" primaryTypographyProps={{variant: 'body2'}}/>
                 </MenuItem>
 
-                <MenuItem component={RouterLink} to="#" sx={{color: 'text.secondary'}}>
-                    <ListItemIcon>
-                        <Icon icon={editFill} width={24} height={24}/>
-                    </ListItemIcon>
-                    <ListItemText primary="Edit" primaryTypographyProps={{variant: 'body2'}}/>
-                </MenuItem>
+                {/* <MenuItem component={RouterLink} to="#" sx={{color: 'text.secondary'}}> */}
+                {/*    <ListItemIcon> */}
+                {/*        <Icon icon={editFill} width={24} height={24}/> */}
+                {/*    </ListItemIcon> */}
+                {/*    <ListItemText primary="Edit" primaryTypographyProps={{variant: 'body2'}}/> */}
+                {/* </MenuItem> */}
             </Menu>
             <DialogDeleteFeedback visible={visibleModalDeleteFeedback} setVisible={() => {
                 setVisibleModalDeleteFeedback(false)

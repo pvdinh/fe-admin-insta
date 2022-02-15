@@ -5,13 +5,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Snackbar from "@mui/material/Snackbar";
-import Stack from "@mui/material/Stack";
-import MuiAlert from "@mui/material/Alert";
 import {connect} from "react-redux";
-import feedbackActions from "../../redux/actions/feedbackActions";
+import postActions from "../../redux/actions/postActions";
 
-function DialogDeleteFeedback(props) {
+function DialogBlockPost(props) {
 
     return (
         <div>
@@ -24,22 +21,20 @@ function DialogDeleteFeedback(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Delete?
+                    Block?
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you want to delete feedback?
+                        Are you want to block this post?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {
-                        props.deleteFeedback(props.id, (data) => {
-                            if (data.message === "success") {
+                        props.blockPost(props.pId,(data)=>{
+                            if(data.message === "success"){
                                 props.setVisible()
+                                alert("Block success!")
                                 props.reload()
-                                alert("delete success!")
-                            } else {
-                                alert("delete false!")
                             }
                         })
                     }}>Confirm</Button>
@@ -60,10 +55,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        deleteFeedback: (id, callback) => {
-            dispatch(feedbackActions.action.deleteFeedback(id, callback))
+        blockPost: (pId, callback) => {
+            dispatch(postActions.action.blockPost(pId, callback))
         },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DialogDeleteFeedback)
+export default connect(mapStateToProps, mapDispatchToProps)(DialogBlockPost)

@@ -30,5 +30,20 @@ class PostRequest extends BaseRequest{
         const url = `admin/manage-post/${payload.search}/search?page=${payload.page}&size=${payload.size}`
         return this.get(url)
     }
+
+    blockPost(pId){
+        const url = `admin/manage-post/${pId}/block`
+        return this.post(url)
+    }
+
+    unBlockPost(pId){
+        const url = `admin/manage-post/${pId}/unblock`
+        return this.post(url)
+    }
+
+    getPostBlockByPostId(pId){
+        const url = `admin/manage-post/block?id=${pId}`
+        return this.get(url)
+    }
 }
 export default PostRequest

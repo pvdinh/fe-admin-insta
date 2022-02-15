@@ -6,7 +6,7 @@ import {Grid, Button, Container, Stack, Typography, MenuItem, TextField} from '@
 // components
 import InfiniteScroll from "react-infinite-scroll-component";
 import {connect} from "react-redux";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Page from '../components/Page';
 import {BlogPostCard, BlogPostsSort, BlogPostsSearch} from '../components/_dashboard/blog';
 //
@@ -14,6 +14,7 @@ import POSTS from '../_mocks_/blog';
 import postActions from "../redux/actions/postActions";
 import {axiosJwt} from "../axios/axiosConfig";
 import {BASE_URL} from "../url";
+import ModalDetailPost from "../components/report/ModalDetailPost";
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -21,9 +22,13 @@ import {BASE_URL} from "../url";
 function Blog(props) {
 
     const [page, setPage] = useState(0)
-    const [size, setSize] = useState(12000)
+    const [size, setSize] = useState(2147483647)
     const [filter, setFilter] = useState(3)
     const [search, setSearch] = useState("")
+
+
+    const [pIdClick, setPIdClick] = useState("")
+    const [visibleModalDetailPost, setVisibleModalDetailPost] = useState(false)
 
 
     useEffect(() => {
@@ -43,6 +48,14 @@ function Blog(props) {
         })
     },[filter])
 
+    const showModalDetailPost = () =>{
+        if(pIdClick !== ""){
+            return(
+                <ModalDetailPost pId={pIdClick} visible={visibleModalDetailPost} setVisible={()=>{setVisibleModalDetailPost(false)}} />
+            )
+        }
+    }
+
     return (
         <Page title="Dashboard: Blog | Minimal-UI">
             <Container>
@@ -56,16 +69,16 @@ function Blog(props) {
                     <BlogPostsSearch setSearch={(s)=> {
                         setSearch(s)
                     }}/>
-                    <TextField select size="small" value={filter} onChange={(e) => {
+                    <TextField disabled={search.split(" ").join("") !== ""} select size="small" value={filter} onChange={(e) => {
                         setFilter(e.target.value)
                         setPage(0)
                     }}>
-                        {/* <MenuItem key="1" value={1}> */}
-                        {/*    Oldest */}
-                        {/* </MenuItem> */}
-                        {/* <MenuItem key="2" value={2}> */}
-                        {/*    Latest */}
-                        {/* </MenuItem> */}
+                         <MenuItem key="1" value={1}>
+                            Oldest
+                         </MenuItem>
+                         <MenuItem key="2" value={2}>
+                            Latest
+                         </MenuItem>
                          <MenuItem key="3" value={3}>
                             Popular
                          </MenuItem>
@@ -89,18 +102,21 @@ function Blog(props) {
                             search.split(" ").join("") !== "" ?
 
                                 props.listResultSearchPost.map((post, index) => (
-                                    <BlogPostCard key={post.id} pId={post.id}/>
+                                    <BlogPostCard setPIdClick={(id)=>{setPIdClick(id);setVisibleModalDetailPost(true)}} key={post.id} pId={post.id}/>
                                 ))
 
                                 :
 
                                 props.listPost.map((post, index) => (
-                                    <BlogPostCard key={post.id} pId={post.id}/>
+                                    <BlogPostCard setPIdClick={(id)=>{setPIdClick(id);setVisibleModalDetailPost(true)}} key={post.id} pId={post.id}/>
                                 ))
                         }
                     </Grid>
                 </InfiniteScroll>
             </Container>
+            {
+                showModalDetailPost()
+            }
         </Page>
     );
 }

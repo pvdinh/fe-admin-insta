@@ -25,11 +25,11 @@ function DialogDeleteReport(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Xoá?
+                    Delete?
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Bạn có muốn xoá nhật ký sản lượng khoán này
+                        Are you want to delete report?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -43,11 +43,11 @@ function DialogDeleteReport(props) {
                                 alert("delete false!")
                             }
                         })
-                    }}>Xác nhận</Button>
+                    }}>Confirm</Button>
                     <Button onClick={() => {
                         props.setVisible()
                     }} autoFocus>
-                        Huỷ
+                        Cancel
                     </Button>
                 </DialogActions>
             </Dialog>

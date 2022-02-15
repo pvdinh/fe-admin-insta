@@ -13,13 +13,16 @@ import bookmarkFill from '@iconify/icons-eva/bookmark-fill';
 import ReactPlayer from "react-player";
 import {connect} from "react-redux";
 import heartFill from '@iconify/icons-eva/heart-fill';
-import {fDate} from "../../utils/formatTime";
+import {LoadingButton} from "@mui/lab";
+import {fDate, fDateTimeSuffix} from "../../utils/formatTime";
 import SvgIconStyle from "../SvgIconStyle";
 import {fShortenNumber} from "../../utils/formatNumber";
 import postActions from "../../redux/actions/postActions";
 import ModalDisplayListUser from "../Modal/ModalDisplayListUser";
 import ModalDisplayListUserCommented from "../Modal/ModalDisplayListUserCommented";
 import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
+import DialogBlockPost from "../post/DialogBlockPost";
+import DialogUnBlockPost from "../post/DialogUnBlockPost";
 
 const CardMediaStyle = styled('div')({
     position: 'relative',
@@ -81,10 +84,13 @@ function ModalDetailPost(props) {
     const [listUserLikedPost, setListUserLikedPost] = useState([])
     const [listUser,setListUser] = useState([])
     const [type,setType] = useState([])
+    const [postBlock,setPostBlock] = useState({})
 
     const [visibleModal,setVisibleModal] = useState(false)
     const [visibleModalComment,setVisibleModalComment] = useState(false)
     const [visibleModalUserAST,setVisibleModalUserAST] = useState(false)
+    const [visibleModalBlockPost,setVisibleModalBlockPost] = useState(false)
+    const [visibleModalUnBlockPost,setVisibleModalUnBlockPost] = useState(false)
 
     useEffect(() => {
         props.getPostInformationFromPId(props.pId, (data) => {
@@ -102,6 +108,13 @@ function ModalDetailPost(props) {
 
         props.getAllUserLikedPost(props.pId, (data) => {
             setListUserLikedPost(data)
+        })
+
+        props.getPostBlockByPostId(props.pId,(data)=>{
+            if (data.data !== null){
+                console.log(data.data)
+                setPostBlock(data.data)
+            }else setPostBlock(null)
         })
     }, [props.pId])
 
@@ -128,6 +141,47 @@ function ModalDetailPost(props) {
                 <ModalUserAccountSetting uId={userAccountSetting.id} visible={visibleModalUserAST} setVisible={()=>{setVisibleModalUserAST(false)}} />
             )
         }
+    }
+
+    const showModalBlockPost = () =>{
+        if(visibleModalBlockPost){
+            return(
+                <DialogBlockPost reload={()=>{reload()}} pId={props.pId} visible={visibleModalBlockPost} setVisible={()=>{setVisibleModalBlockPost(false)}} />
+            )
+        }
+    }
+
+    const showModalUnBlockPost = () =>{
+        if(visibleModalUnBlockPost){
+            return(
+                <DialogUnBlockPost reload={()=>{reload()}} pId={props.pId} visible={visibleModalUnBlockPost} setVisible={()=>{setVisibleModalUnBlockPost(false)}} />
+            )
+        }
+    }
+
+    const reload = () =>{
+        props.getPostInformationFromPId(props.pId, (data) => {
+            setPost(data.post)
+            setUserAccountSetting(data.userAccountSetting)
+        })
+
+        props.getAllCommentInPost(props.pId, (data) => {
+            setListComment(data)
+        })
+
+        props.getAllUserSavedPost(props.pId, (data) => {
+            setListUserSavedPost(data)
+        })
+
+        props.getAllUserLikedPost(props.pId, (data) => {
+            setListUserLikedPost(data)
+        })
+
+        props.getPostBlockByPostId(props.pId,(data)=>{
+            if (data.data !== null){
+                setPostBlock(data.data)
+            }else setPostBlock(null)
+        })
     }
 
     return (
@@ -226,6 +280,29 @@ function ModalDetailPost(props) {
                                     {post.caption}
                                 </TitleStyle>
 
+                                {
+                                    postBlock !== null ?
+                                        <LoadingButton
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            style={{background:"#EE1C2F"}}
+                                            onClick={()=>{setVisibleModalUnBlockPost(true)}}
+                                        >
+                                            Block from - {new Date(postBlock.dateCreated).toLocaleDateString()} {new Date(postBlock.dateCreated).toLocaleTimeString()}
+                                        </LoadingButton>
+                                        :
+                                        <LoadingButton
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            style={{background:"#EE1C2F"}}
+                                            onClick={()=>{setVisibleModalBlockPost(true)}}
+                                        >
+                                            Block
+                                        </LoadingButton>
+                                }
+
                                 <InfoStyle>
                                     <Box
                                         sx={{
@@ -281,6 +358,12 @@ function ModalDetailPost(props) {
             {
                 showModalUserAST()
             }
+            {
+                showModalBlockPost()
+            }
+            {
+                showModalUnBlockPost()
+            }
         </div>
     )
 }
@@ -302,6 +385,9 @@ function mapDispatchToProps(dispatch) {
         },
         getAllUserLikedPost: (pId, callback) => {
             dispatch(postActions.action.getAllUserLikedPost(pId, callback))
+        },
+        getPostBlockByPostId: (pId, callback) => {
+            dispatch(postActions.action.getPostBlockByPostId(pId, callback))
         },
     }
 }
