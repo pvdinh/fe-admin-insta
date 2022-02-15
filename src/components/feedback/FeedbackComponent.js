@@ -29,6 +29,7 @@ import {axiosJwt} from "../../axios/axiosConfig";
 import FeedbackListToolbar from "./FeedbackListToolbar";
 import ModalUserAccountSetting from "./ModalUserAccountSetting";
 import {BASE_URL} from "../../url";
+import FeedbackMoreMenu from "./FeedbackMoreMenu";
 
 
 const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
@@ -125,6 +126,12 @@ function FeedbackComponent(props) {
         e.stopPropagation();
     }
 
+    const reload = () =>{
+        props.getFeedback({page, size: rowsPerPage}, (data) => {
+            setTotal(data.total)
+        })
+    }
+
     return (
         <Page title="User | Minimal-UI">
             <Container>
@@ -166,7 +173,7 @@ function FeedbackComponent(props) {
                                                     <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
 
                                                     <TableCell align="right">
-                                                        <UserMoreMenu/>
+                                                        <FeedbackMoreMenu id={id} reload={()=>{reload()}} />
                                                     </TableCell>
                                                 </TableRow>
                                                 );

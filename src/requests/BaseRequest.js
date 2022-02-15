@@ -68,7 +68,7 @@ export default class BaseRequest {
             if (response.data.data === undefined) {
                 return {
                     statusCode: response.data.statusCode,
-                    data: response.data.message,
+                    message: response.data.message,
                 }
             }
             if(response.data.total !== undefined){

@@ -10,5 +10,10 @@ class ReportRequest extends BaseRequest{
         const url = `admin/manage-report/${payload.search}/search?page=${payload.page}&size=${payload.size}`
         return this.get(url)
     }
+
+    deleteReport(id){
+        const url = `admin/manage-report/${id}/delete`
+        return this.delete(url)
+    }
 }
 export default ReportRequest

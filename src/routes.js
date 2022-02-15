@@ -25,8 +25,8 @@ export default function Router() {
         { path: '', element: localStorage.getItem("sessionTokenAdmin") ? <DashboardApp /> : <Navigate to="/login"/>},
         { path: 'app', element: localStorage.getItem("sessionTokenAdmin") ? <DashboardApp /> : <Navigate to="/login"/>},
         { path: 'user', element: localStorage.getItem("sessionTokenAdmin") ? <User /> : <Navigate to="/login"/> },
-        { path: 'products', element:  localStorage.getItem("sessionTokenAdmin") ? <Products /> : <Navigate to="/login"/> },
-        { path: 'blog', element:  localStorage.getItem("sessionTokenAdmin") ? <Blog /> : <Navigate to="/login"/> },
+        // { path: 'products', element:  localStorage.getItem("sessionTokenAdmin") ? <Products /> : <Navigate to="/login"/> },
+        { path: 'post', element:  localStorage.getItem("sessionTokenAdmin") ? <Blog /> : <Navigate to="/login"/> },
         { path: 'feedback', element:  localStorage.getItem("sessionTokenAdmin") ? <FeedbackComponent /> : <Navigate to="/login"/> },
         { path: 'report', element:  localStorage.getItem("sessionTokenAdmin") ? <ReportComponent /> : <Navigate to="/login"/> },
       ]

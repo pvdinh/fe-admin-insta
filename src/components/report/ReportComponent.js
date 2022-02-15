@@ -30,6 +30,8 @@ import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
 import ReportListToolbar from "./ReportListToolbar";
 import ModalDetailPost from "./ModalDetailPost";
 import {BASE_URL} from "../../url";
+import ReportMoreMenu from "./ReportMoreMenu";
+import FeedbackMoreMenu from "../feedback/FeedbackMoreMenu";
 // ----------------------------------------------------------------------
 
 const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
@@ -138,6 +140,13 @@ function ReportComponent(props) {
         e.stopPropagation();
     }
 
+
+    const reload = () =>{
+        props.getReport({page, size: rowsPerPage}, (data) => {
+            setTotal(data.total)
+        })
+    }
+
     return (
         <Page title="User | Minimal-UI">
             <Container>
@@ -186,7 +195,7 @@ function ReportComponent(props) {
                                                 <TableCell align="left">{fDateTimeSuffix(dateCreated)}</TableCell>
 
                                                 <TableCell align="right">
-                                                    <UserMoreMenu/>
+                                                    <ReportMoreMenu id={id} reload={()=>{reload()}} />
                                                 </TableCell>
                                             </TableRow>
                                         );

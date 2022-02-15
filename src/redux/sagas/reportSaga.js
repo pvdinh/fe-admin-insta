@@ -1,5 +1,5 @@
 import {all, call, put, takeEvery} from "@redux-saga/core/effects";
-import {getReport, searchReport} from "../../services/ReportApiServices";
+import {deleteReport, getReport, searchReport} from "../../services/ReportApiServices";
 import reportActions from "../actions/reportActions";
 
 // eslint-disable-next-line camelcase
@@ -28,9 +28,20 @@ function *searchReport_saga(action) {
     }
 }
 
+// eslint-disable-next-line camelcase
+function *deleteReport_saga(action) {
+    try {
+        const response = yield call(deleteReport,action.id)
+        yield action.callback(response)
+    }catch (e) {
+        console.log('err',e)
+    }
+}
+
 function *listen() {
     yield takeEvery(reportActions.type.GET_REPORT,getReport_saga)
     yield takeEvery(reportActions.type.SEARCH_REPORT,searchReport_saga)
+    yield takeEvery(reportActions.type.DELETE_REPORT,deleteReport_saga)
 }
 
 function *reportSaga() {

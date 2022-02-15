@@ -9,3 +9,7 @@ export const searchReport = (payload) => {
     const reportRequest = new ReportRequest()
     return reportRequest.searchReport(payload)
 }
+export const deleteReport = (id) => {
+    const reportRequest = new ReportRequest()
+    return reportRequest.deleteReport(id)
+}

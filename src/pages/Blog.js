@@ -21,7 +21,7 @@ import {BASE_URL} from "../url";
 function Blog(props) {
 
     const [page, setPage] = useState(0)
-    const [size, setSize] = useState(12)
+    const [size, setSize] = useState(12000)
     const [filter, setFilter] = useState(3)
     const [search, setSearch] = useState("")
 

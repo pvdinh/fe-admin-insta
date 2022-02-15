@@ -39,7 +39,7 @@ BlogPostsSearch.propTypes = {
 function BlogPostsSearch(props) {
 
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(12);
+    const [size, setSize] = useState(12000);
     const [search, setSearch] = useState("")
 
     const onChangeSearch = (e) =>{

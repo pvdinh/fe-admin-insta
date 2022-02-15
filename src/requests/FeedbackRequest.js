@@ -10,5 +10,10 @@ class FeedbackRequest extends BaseRequest{
         const url = `admin/manage-feedback/${payload.search}/search?page=${payload.page}&size=${payload.size}`
         return this.get(url)
     }
+
+    deleteFeedback(id){
+        const url = `admin/manage-feedback/${id}/delete`
+        return this.delete(url)
+    }
 }
 export default FeedbackRequest
