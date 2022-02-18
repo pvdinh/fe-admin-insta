@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
-import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
 import emailFill from '@iconify/icons-eva/email-fill';
 import edit2Fill from '@iconify/icons-eva/edit-2-fill';
