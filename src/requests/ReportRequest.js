@@ -15,5 +15,10 @@ class ReportRequest extends BaseRequest{
         const url = `admin/manage-report/${id}/delete`
         return this.delete(url)
     }
+
+    filterReportByTime(payload){
+        const url = `admin/manage-report/filter?start=${payload.start}&end=${payload.end}&page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
 }
 export default ReportRequest

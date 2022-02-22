@@ -49,6 +49,7 @@ function ReportComponent(props) {
     const [total, setTotal] = useState(0);
     const [type, setType] = useState(0);
     const [search, setSearch] = useState("")
+    const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [visible,setVisible] = useState(false)
     const [visibleModalDetailPost,setVisibleModalDetailPost] = useState(false)
@@ -67,6 +68,15 @@ function ReportComponent(props) {
                 search, page, size: rowsPerPage,
             }
             props.searchReport(payload, (data) => {
+                setTotal(data.total)
+            })
+        } else if (type === 2){
+            const payload = {
+                start: Date.parse(valueRangeDate[0]),
+                end: Date.parse(valueRangeDate[1]),
+                page,size:rowsPerPage,
+            }
+            props.filterReportByTime(payload,(data)=>{
                 setTotal(data.total)
             })
         } else {
@@ -112,8 +122,21 @@ function ReportComponent(props) {
     };
 
     const setOnTypeFilerReport = (s, t) => {
-        setSearch(s)
-        setType(t)
+        switch (t) {
+            case 1:{
+                setSearch(s)
+                setType(t)
+                break;
+            }
+            case 2:
+            {
+                setValueRangeDate(s)
+                setType(t)
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - total) : 0;
@@ -249,6 +272,9 @@ function mapDispatchToProps(dispatch) {
         },
         searchReport: (payload, callback) => {
             dispatch(reportActions.action.searchReport(payload, callback))
+        },
+        filterReportByTime: (payload, callback) => {
+            dispatch(reportActions.action.filterReportByTime(payload, callback))
         },
     }
 }

@@ -11,10 +11,15 @@ import {
     IconButton,
     Typography,
     OutlinedInput,
-    InputAdornment
+    InputAdornment, Container, Button
 } from '@mui/material';
+import closeOutline from '@iconify/icons-eva/close-outline';
 import {connect} from "react-redux";
-import {useState} from "react";
+import React, {useState} from "react";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DateRangePicker from "@mui/lab/DateRangePicker";
+import TextField from "@mui/material/TextField";
 import reportActions from "../../redux/actions/reportActions";
 
 // ----------------------------------------------------------------------
@@ -41,14 +46,15 @@ const SearchStyle = styled(OutlinedInput)(({theme}) => ({
 
 // ----------------------------------------------------------------------
 
-function ReportListToolbar({getReport,searchReport, resultTotalReport, setOnTypeFilerReport, page, size}) {
+function ReportListToolbar({getReport, searchReport, resultTotalReport, setOnTypeFilerReport, page, size, filterReportByTime}) {
 
+    const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
     const [search, setSearch] = useState("")
 
     const onChangeSearch = (e) => {
-        console.log("e.target.value",e.target.value)
+        console.log("e.target.value", e.target.value)
         setSearch(e.target.value)
-        if(e.target.value.split(" ").join("") !== ""){
+        if (e.target.value.split(" ").join("") !== "") {
             const payload = {
                 search: e.target.value, page, size,
             }
@@ -56,12 +62,28 @@ function ReportListToolbar({getReport,searchReport, resultTotalReport, setOnType
                 resultTotalReport(data.total)
                 setOnTypeFilerReport(e.target.value, 1)
             })
-        }else {
-            getReport({page:0, size}, (data) => {
-                resultTotalReport(data.total)
-                setOnTypeFilerReport("",0)
-            })
+        } else {
+            reset()
         }
+    }
+
+    const onFilterByTime = () => {
+        const payload = {
+            start: Date.parse(valueRangeDate[0]),
+            end: Date.parse(valueRangeDate[1]),
+            page, size
+        }
+        filterReportByTime(payload, (data) => {
+            resultTotalReport(data.total)
+            setOnTypeFilerReport(valueRangeDate, 2)
+        })
+    }
+
+    const reset = () => {
+        getReport({page: 0, size}, (data) => {
+            resultTotalReport(data.total)
+            setOnTypeFilerReport("", 0)
+        })
     }
 
     return (
@@ -78,11 +100,41 @@ function ReportListToolbar({getReport,searchReport, resultTotalReport, setOnType
                     </InputAdornment>
                 }
             />
-            <Tooltip title="Filter list">
-                <IconButton>
-                    <Icon icon={roundFilterList}/>
-                </IconButton>
-            </Tooltip>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div style={{display: "flex"}}>
+                    <DateRangePicker
+                        calendars={1}
+                        value={valueRangeDate}
+                        onChange={(newValue) => {
+                            setValueRangeDate(newValue);
+                            if (newValue[0] !== null && newValue[1] !== null) {
+                                console.log(Date.parse(newValue[0]))
+                                console.log(newValue[0])
+                                console.log(Date.parse(newValue[1]))
+                                console.log(newValue[1])
+                                setValueRangeDate(newValue);
+                            }
+                        }}
+                        renderInput={(startProps, endProps) => (
+                            <>
+                                <TextField {...startProps} />
+                                <Box sx={{mx: 2}}> to </Box>
+                                <TextField {...endProps} />
+                            </>
+                        )}
+                    />
+                    <Button variant="contained" style={{marginLeft: "10px"}} onClick={() => {
+                        onFilterByTime()
+                    }}>
+                        Search
+                    </Button>
+                    <Button variant="contained" style={{marginLeft: "10px", width: "20px"}} onClick={() => {
+                        reset()
+                    }}>
+                        <Icon icon={closeOutline} fontSize="large"/>
+                    </Button>
+                </div>
+            </LocalizationProvider>
         </RootStyle>
     );
 }
@@ -98,6 +150,9 @@ function mapDispatchToProps(dispatch) {
         },
         searchReport: (payload, callback) => {
             dispatch(reportActions.action.searchReport(payload, callback))
+        },
+        filterReportByTime: (payload, callback) => {
+            dispatch(reportActions.action.filterReportByTime(payload, callback))
         },
     }
 }

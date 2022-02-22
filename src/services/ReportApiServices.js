@@ -13,3 +13,7 @@ export const deleteReport = (id) => {
     const reportRequest = new ReportRequest()
     return reportRequest.deleteReport(id)
 }
+export const filterReportByTime = (payload) => {
+    const reportRequest = new ReportRequest()
+    return reportRequest.filterReportByTime(payload)
+}
