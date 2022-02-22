@@ -12,3 +12,7 @@ export const deleteFeedback = (id) => {
     const feedbackRequest = new FeedbackRequest()
     return feedbackRequest.deleteFeedback(id)
 }
+export const filterFeedbackByTime = (payload) => {
+    const feedbackRequest = new FeedbackRequest()
+    return feedbackRequest.filterFeedbackByTime(payload)
+}

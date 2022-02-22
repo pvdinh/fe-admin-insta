@@ -1,6 +1,6 @@
 import {all, call, put, takeEvery} from "@redux-saga/core/effects";
 import feedbackActions from "../actions/feedbackActions";
-import {deleteFeedback, getFeedback, searchFeedback} from "../../services/FeedbackApiServices";
+import {deleteFeedback, filterFeedbackByTime, getFeedback, searchFeedback} from "../../services/FeedbackApiServices";
 
 // eslint-disable-next-line camelcase
 function *getFeedback_saga(action) {
@@ -38,10 +38,25 @@ function *deleteFeedback_saga(action) {
     }
 }
 
+
+// eslint-disable-next-line camelcase
+function *filterFeedbackByTime_saga(action) {
+    try {
+        const response = yield call(filterFeedbackByTime,action.payload)
+        yield action.callback(response)
+        if(response.statusCode === 200){
+            yield put({type:feedbackActions.type.FILTER_FEEDBACK_BY_TIME_SUCCESS,data:response.data})
+        }
+    }catch (e) {
+        console.log('err',e)
+    }
+}
+
 function *listen() {
     yield takeEvery(feedbackActions.type.GET_FEEDBACK,getFeedback_saga)
     yield takeEvery(feedbackActions.type.SEARCH_FEEDBACK,searchFeedback_saga)
     yield takeEvery(feedbackActions.type.DELETE_FEEDBACK,deleteFeedback_saga)
+    yield takeEvery(feedbackActions.type.FILTER_FEEDBACK_BY_TIME,filterFeedbackByTime_saga)
 }
 
 function *feedbackSaga() {

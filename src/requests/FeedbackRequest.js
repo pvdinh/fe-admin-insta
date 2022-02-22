@@ -15,5 +15,10 @@ class FeedbackRequest extends BaseRequest{
         const url = `admin/manage-feedback/${id}/delete`
         return this.delete(url)
     }
+
+    filterFeedbackByTime(payload){
+        const url = `admin/manage-feedback/filter?start=${payload.start}&end=${payload.end}&page=${payload.page}&size=${payload.size}`
+        return this.get(url)
+    }
 }
 export default FeedbackRequest

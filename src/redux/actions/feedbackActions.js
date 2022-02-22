@@ -5,6 +5,8 @@ const type = {
     SEARCH_FEEDBACK_SUCCESS: "SEARCH_FEEDBACK_SUCCESS",
     DELETE_FEEDBACK: "DELETE_FEEDBACK",
     DELETE_FEEDBACK_SUCCESS: "DELETE_FEEDBACK_SUCCESS",
+    FILTER_FEEDBACK_BY_TIME: "FILTER_FEEDBACK_BY_TIME",
+    FILTER_FEEDBACK_BY_TIME_SUCCESS: "FILTER_FEEDBACK_BY_TIME_SUCCESS",
 }
 const action = {
     getFeedback: (payload, callback) => ({
@@ -21,6 +23,11 @@ const action = {
         type: type.DELETE_FEEDBACK,
         id,
         callback,
-    })
+    }),
+    filterFeedbackByTime: (payload, callback) => ({
+        type: type.FILTER_FEEDBACK_BY_TIME,
+        payload,
+        callback,
+    }),
 }
 export default {type, action}

@@ -51,15 +51,15 @@ FeedbackListToolbar.propTypes = {
     resultTotalFeedback: PropTypes.func,
 };
 
-function FeedbackListToolbar({getFeedback,searchFeedback, resultTotalFeedback, setOnTypeFilerFeedback, page, size}) {
+function FeedbackListToolbar({getFeedback, searchFeedback, resultTotalFeedback, setOnTypeFilerFeedback, page, size, filterFeedbackByTime}) {
 
     const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
     const [search, setSearch] = useState("")
 
     const onChangeSearch = (e) => {
-        console.log("e.target.value",e.target.value)
+        console.log("e.target.value", e.target.value)
         setSearch(e.target.value)
-        if(e.target.value.split(" ").join("") !== ""){
+        if (e.target.value.split(" ").join("") !== "") {
             const payload = {
                 search: e.target.value, page, size,
             }
@@ -67,12 +67,28 @@ function FeedbackListToolbar({getFeedback,searchFeedback, resultTotalFeedback, s
                 resultTotalFeedback(data.total)
                 setOnTypeFilerFeedback(e.target.value, 1)
             })
-        }else {
-            getFeedback({page:0, size}, (data) => {
-                resultTotalFeedback(data.total)
-                setOnTypeFilerFeedback("",0)
-            })
+        } else {
+            reset()
         }
+    }
+
+    const onFilterByTime = () => {
+        const payload = {
+            start: Date.parse(valueRangeDate[0]),
+            end: Date.parse(valueRangeDate[1]),
+            page, size
+        }
+        filterFeedbackByTime(payload, (data) => {
+            resultTotalFeedback(data.total)
+            setOnTypeFilerFeedback(valueRangeDate, 2)
+        })
+    }
+
+    const reset = () => {
+        getFeedback({page: 0, size}, (data) => {
+            resultTotalFeedback(data.total)
+            setOnTypeFilerFeedback("", 0)
+        })
     }
 
     return (
@@ -90,29 +106,34 @@ function FeedbackListToolbar({getFeedback,searchFeedback, resultTotalFeedback, s
                 }
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <div style={{display:"flex"}}>
+                <div style={{display: "flex"}}>
                     <DateRangePicker
                         calendars={1}
                         value={valueRangeDate}
                         onChange={(newValue) => {
                             setValueRangeDate(newValue);
-                            if(newValue[0] !== null && newValue[1] !== null){
-                                console.log(newValue)
+                            if (newValue[0] !== null && newValue[1] !== null) {
+                                setValueRangeDate(newValue)
                             }
                         }}
                         renderInput={(startProps, endProps) => (
                             <>
                                 <TextField {...startProps} />
-                                <Box sx={{ mx: 2 }}> to </Box>
+                                <Box sx={{mx: 2}}> to </Box>
                                 <TextField {...endProps} />
                             </>
                         )}
                     />
-                    <Button variant="contained" style={{marginLeft:"10px"}}>
+                    <Button variant="contained" style={{marginLeft: "10px"}} onClick={() => {
+                        onFilterByTime()
+                    }}>
                         Search
                     </Button>
-                    <Button variant="contained" style={{marginLeft:"10px",width:"20px"}} >
-                        <Icon icon={closeOutline} fontSize="large" />
+                    <Button variant="contained" style={{marginLeft: "10px", width: "20px"}} onClick={() => {
+                        setValueRangeDate([null, null])
+                        reset()
+                    }}>
+                        <Icon icon={closeOutline} fontSize="large"/>
                     </Button>
                 </div>
             </LocalizationProvider>
@@ -131,6 +152,9 @@ function mapDispatchToProps(dispatch) {
         },
         searchFeedback: (payload, callback) => {
             dispatch(feedbackActions.action.searchFeedback(payload, callback))
+        },
+        filterFeedbackByTime: (payload, callback) => {
+            dispatch(feedbackActions.action.filterFeedbackByTime(payload, callback))
         },
     }
 }

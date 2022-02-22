@@ -129,6 +129,7 @@ function ReportListToolbar({getReport, searchReport, resultTotalReport, setOnTyp
                         Search
                     </Button>
                     <Button variant="contained" style={{marginLeft: "10px", width: "20px"}} onClick={() => {
+                        setValueRangeDate([null,null])
                         reset()
                     }}>
                         <Icon icon={closeOutline} fontSize="large"/>

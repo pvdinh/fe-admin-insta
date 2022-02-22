@@ -123,6 +123,11 @@ function ReportComponent(props) {
 
     const setOnTypeFilerReport = (s, t) => {
         switch (t) {
+            case 0:{
+                setSearch(s)
+                setType(t)
+                break;
+            }
             case 1:{
                 setSearch(s)
                 setType(t)

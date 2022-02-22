@@ -12,10 +12,15 @@ import {
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment, Button
 } from '@mui/material';
 import {connect} from "react-redux";
-import {useState} from "react";
+import React, {useState} from "react";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DateRangePicker from "@mui/lab/DateRangePicker";
+import TextField from "@mui/material/TextField";
+import closeOutline from "@iconify/icons-eva/close-outline";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import reportActions from "../../../redux/actions/reportActions";
 import userAccountActions from "../../../redux/actions/userAccountActions";
 
@@ -45,6 +50,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 function UserListToolbar(props) {
 
+  const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
   const [search,setSearch] = useState("")
 
   const onSearch = (e) =>{
@@ -79,11 +85,33 @@ function UserListToolbar(props) {
               </InputAdornment>
             }
         />
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList}/>
-          </IconButton>
-        </Tooltip>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <div style={{display:"flex"}}>
+            <DateRangePicker
+                calendars={1}
+                value={valueRangeDate}
+                onChange={(newValue) => {
+                  setValueRangeDate(newValue);
+                  if(newValue[0] !== null && newValue[1] !== null){
+                    console.log(newValue)
+                  }
+                }}
+                renderInput={(startProps, endProps) => (
+                    <>
+                      <TextField {...startProps} />
+                      <Box sx={{ mx: 2 }}> to </Box>
+                      <TextField {...endProps} />
+                    </>
+                )}
+            />
+            <Button variant="contained" style={{marginLeft:"10px"}}>
+              Search
+            </Button>
+            <Button variant="contained" style={{marginLeft:"10px",width:"20px"}} >
+              <Icon icon={closeOutline} fontSize="large" />
+            </Button>
+          </div>
+        </LocalizationProvider>
       </RootStyle>
   );
 }

@@ -49,6 +49,7 @@ function FeedbackComponent(props) {
     const [total, setTotal] = useState(0);
     const [type, setType] = useState(0);
     const [search, setSearch] = useState("")
+    const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [visible,setVisible] = useState(false)
     const [uIdClick,setUIdClick] = useState("")
@@ -61,6 +62,15 @@ function FeedbackComponent(props) {
                 search, page, size: rowsPerPage,
             }
             props.searchFeedback(payload, (data) => {
+                setTotal(data.total)
+            })
+        } else if (type === 2){
+            const payload = {
+                start: Date.parse(valueRangeDate[0]),
+                end: Date.parse(valueRangeDate[1]),
+                page,size:rowsPerPage,
+            }
+            props.filterFeedbackByTime(payload,(data)=>{
                 setTotal(data.total)
             })
         } else {
@@ -106,8 +116,26 @@ function FeedbackComponent(props) {
     };
 
     const setOnTypeFilerFeedback = (s, t) => {
-        setSearch(s)
-        setType(t)
+        switch (t) {
+            case 0:{
+                setSearch(s)
+                setType(t)
+                break;
+            }
+            case 1:{
+                setSearch(s)
+                setType(t)
+                break;
+            }
+            case 2:
+            {
+                setValueRangeDate(s)
+                setType(t)
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - total) : 0;
@@ -224,6 +252,9 @@ function mapDispatchToProps(dispatch) {
         },
         searchFeedback: (payload, callback) => {
             dispatch(feedbackActions.action.searchFeedback(payload, callback))
+        },
+        filterFeedbackByTime: (payload, callback) => {
+            dispatch(feedbackActions.action.filterFeedbackByTime(payload, callback))
         },
     }
 }
