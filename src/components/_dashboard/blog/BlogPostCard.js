@@ -23,6 +23,8 @@ import postActions from "../../../redux/actions/postActions";
 import ModalDisplayListUser from "../../Modal/ModalDisplayListUser";
 import ModalDisplayListUserCommented from "../../Modal/ModalDisplayListUserCommented";
 import ModalUserAccountSetting from "../../feedback/ModalUserAccountSetting";
+import ModalDetailPost from "../../report/ModalDetailPost";
+import Page from "../../Page";
 
 // ----------------------------------------------------------------------
 
@@ -93,6 +95,9 @@ function BlogPostCard(props) {
     const [visibleModal,setVisibleModal] = useState(false)
     const [visibleModalComment,setVisibleModalComment] = useState(false)
     const [visibleModalUserAST,setVisibleModalUserAST] = useState(false)
+    const [reload,setReload] = useState(false)
+    const [pIdClick, setPIdClick] = useState("")
+    const [visibleModalDetailPost, setVisibleModalDetailPost] = useState(false)
 
     useEffect(() => {
         props.getPostInformationFromPId(props.pId, (data) => {
@@ -111,7 +116,7 @@ function BlogPostCard(props) {
         props.getAllUserLikedPost(props.pId, (data) => {
             setListUserLikedPost(data)
         })
-    }, [props.pId])
+    }, [props.pId,reload])
 
     const showModal = () =>{
         if(visibleModal){
@@ -125,7 +130,7 @@ function BlogPostCard(props) {
     const showModalComment = () =>{
         if(visibleModalComment){
             return(
-                <ModalDisplayListUserCommented list={listUser} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
+                <ModalDisplayListUserCommented reload={()=>{setReload(!reload)}} list={listComment} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
             )
         }
     }
@@ -138,6 +143,13 @@ function BlogPostCard(props) {
         }
     }
 
+    const showModalDetailPost = () =>{
+        if(visibleModalDetailPost){
+            return(
+                <ModalDetailPost reload={()=>{setReload(!reload)}} pId={pIdClick} visible={visibleModalDetailPost} setVisible={()=>{setVisibleModalDetailPost(false)}} />
+            )
+        }
+    }
 
     return (
     <Grid item xs={12} sm={6} md={3}>
@@ -166,7 +178,7 @@ function BlogPostCard(props) {
                               />
                           </LazyLoad>
                           <LazyLoad>
-                              <CoverImgStyle style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}} alt='image' src={post.imagePath}/>
+                              <CoverImgStyle style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}} alt='image' src={post.imagePath}/>
                           </LazyLoad>
 
                       </CardMediaStyle>
@@ -217,7 +229,7 @@ function BlogPostCard(props) {
                       color="inherit"
                       variant="subtitle2"
                       underline="none"
-                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
+                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
                   >
                       {post.id !== undefined ? post.id : ""}
                   </TitleStyle>
@@ -226,7 +238,7 @@ function BlogPostCard(props) {
                       gutterBottom
                       variant="caption"
                       sx={{color: 'text.disabled', display: 'block'}}
-                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
+                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
                   >
                       {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
                   </Typography>
@@ -237,7 +249,7 @@ function BlogPostCard(props) {
                       variant="subtitle2"
                       underline="hover"
                       component={RouterLink}
-                      style={{cursor:"pointer"}} onClick={()=>{props.setPIdClick(props.pId)}}
+                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
                   >
                       {post.caption}
                   </TitleStyle>
@@ -262,7 +274,7 @@ function BlogPostCard(props) {
                               ml: 1.5,
                           }}
                           style={{cursor: "pointer"}}
-                          onClick={()=>{setListUser(listComment);setVisibleModalComment(true)}}
+                          onClick={()=>{setVisibleModalComment(true)}}
                       >
                           <Box component={Icon} icon={messageCircleFill}
                                sx={{width: 16, height: 16, mr: 0.5}}/>
@@ -295,6 +307,9 @@ function BlogPostCard(props) {
         }
         {
             showModalUserAST()
+        }
+        {
+            showModalDetailPost()
         }
     </Grid>
   );

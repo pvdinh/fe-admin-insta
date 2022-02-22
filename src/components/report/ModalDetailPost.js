@@ -130,7 +130,7 @@ function ModalDetailPost(props) {
     const showModalComment = () =>{
         if(visibleModalComment){
             return(
-                <ModalDisplayListUserCommented list={listUser} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
+                <ModalDisplayListUserCommented reload={()=>{reload()}} list={listComment} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
             )
         }
     }
@@ -146,7 +146,7 @@ function ModalDetailPost(props) {
     const showModalBlockPost = () =>{
         if(visibleModalBlockPost){
             return(
-                <DialogBlockPost reload={()=>{reload()}} pId={props.pId} visible={visibleModalBlockPost} setVisible={()=>{setVisibleModalBlockPost(false)}} />
+                <DialogBlockPost reload={()=>{reload();props.reload()}} pId={props.pId} visible={visibleModalBlockPost} setVisible={()=>{setVisibleModalBlockPost(false)}} />
             )
         }
     }
@@ -154,7 +154,7 @@ function ModalDetailPost(props) {
     const showModalUnBlockPost = () =>{
         if(visibleModalUnBlockPost){
             return(
-                <DialogUnBlockPost reload={()=>{reload()}} pId={props.pId} visible={visibleModalUnBlockPost} setVisible={()=>{setVisibleModalUnBlockPost(false)}} />
+                <DialogUnBlockPost reload={()=>{reload();props.reload()}} pId={props.pId} visible={visibleModalUnBlockPost} setVisible={()=>{setVisibleModalUnBlockPost(false)}} />
             )
         }
     }

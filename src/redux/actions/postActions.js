@@ -19,6 +19,7 @@ const type = {
     UN_BLOCK_POST_SUCCESS: "UN_BLOCK_POST_SUCCESS",
     GET_POST_BLOCK_BY_ID: "GET_POST_BLOCK_BY_ID",
     GET_POST_BLOCK_BY_ID_SUCCESS: "GET_POST_BLOCK_BY_ID_SUCCESS",
+    DELETE_COMMENT: "DELETE_COMMENT",
 }
 const action = {
     getPostInformationFromPId: (pid, callback) => ({
@@ -69,6 +70,11 @@ const action = {
     getPostBlockByPostId: (pId, callback) => ({
         type: type.GET_POST_BLOCK_BY_ID,
         id: pId,
+        callback,
+    }),
+    deleteComment: (id, callback) => ({
+        type: type.DELETE_COMMENT,
+        id,
         callback,
     }),
 }

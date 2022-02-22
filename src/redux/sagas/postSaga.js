@@ -1,9 +1,11 @@
 import {all, takeEvery, call, put} from "@redux-saga/core/effects";
 import postActions from "../actions/postActions";
 import {
-    blockPost,
+    // eslint-disable-next-line import/named
+    blockPost, deleteComment,
     getAllCommentInPost, getAllPost,
     getAllUserLikedPost,
+    // eslint-disable-next-line import/named
     getAllUserSavedPost, getPostBlockByPostId,
     getPostInformationFromPId, searchPost, unBlockPost
 } from "../../services/PostApiServices";
@@ -123,6 +125,18 @@ function* getPostBlockByPostId_saga(action) {
     }
 }
 
+// eslint-disable-next-line camelcase
+function* deleteComment_saga(action) {
+    try {
+        const response = yield call(deleteComment, action.id)
+        if(response.statusCode === 200){
+            yield action.callback(response)
+        }
+    } catch (e) {
+        console.log('err', e)
+    }
+}
+
 function* listen() {
     yield takeEvery(postActions.type.GET_POST_INFORMATION_FROM_PID, getPostInformationFromPId_saga)
     yield takeEvery(postActions.type.GET_ALL_COMMENT_IN_POST, getAllCommentInPost_saga)
@@ -134,6 +148,7 @@ function* listen() {
     yield takeEvery(postActions.type.BLOCK_POST, blockPost_saga)
     yield takeEvery(postActions.type.UN_BLOCK_POST, unBlockPost_saga)
     yield takeEvery(postActions.type.GET_POST_BLOCK_BY_ID, getPostBlockByPostId_saga)
+    yield takeEvery(postActions.type.DELETE_COMMENT, deleteComment_saga)
 }
 
 export default function* postSaga() {

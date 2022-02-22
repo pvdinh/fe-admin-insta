@@ -26,11 +26,6 @@ function Blog(props) {
     const [filter, setFilter] = useState(3)
     const [search, setSearch] = useState("")
 
-
-    const [pIdClick, setPIdClick] = useState("")
-    const [visibleModalDetailPost, setVisibleModalDetailPost] = useState(false)
-
-
     useEffect(() => {
         axiosJwt.get(`${BASE_URL}/api/v1/user-account-setting/get`).then((res) => {
             props.getAllPost({filter, page, size}, () => {
@@ -47,14 +42,6 @@ function Blog(props) {
         props.getAllPost({filter, page, size}, () => {
         })
     },[filter])
-
-    const showModalDetailPost = () =>{
-        if(pIdClick !== ""){
-            return(
-                <ModalDetailPost pId={pIdClick} visible={visibleModalDetailPost} setVisible={()=>{setVisibleModalDetailPost(false)}} />
-            )
-        }
-    }
 
     return (
         <Page title="Dashboard: Blog | Minimal-UI">
@@ -102,21 +89,18 @@ function Blog(props) {
                             search.split(" ").join("") !== "" ?
 
                                 props.listResultSearchPost.map((post, index) => (
-                                    <BlogPostCard setPIdClick={(id)=>{setPIdClick(id);setVisibleModalDetailPost(true)}} key={post.id} pId={post.id}/>
+                                    <BlogPostCard key={post.id} pId={post.id}/>
                                 ))
 
                                 :
 
                                 props.listPost.map((post, index) => (
-                                    <BlogPostCard setPIdClick={(id)=>{setPIdClick(id);setVisibleModalDetailPost(true)}} key={post.id} pId={post.id}/>
+                                    <BlogPostCard key={post.id} pId={post.id}/>
                                 ))
                         }
                     </Grid>
                 </InfiniteScroll>
             </Container>
-            {
-                showModalDetailPost()
-            }
         </Page>
     );
 }

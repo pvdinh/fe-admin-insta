@@ -45,5 +45,10 @@ class PostRequest extends BaseRequest{
         const url = `admin/manage-post/block?id=${pId}`
         return this.get(url)
     }
+
+    deleteComment(id){
+        const url = `admin/manage-post/${id}/delete-comment`
+        return this.delete(url)
+    }
 }
 export default PostRequest

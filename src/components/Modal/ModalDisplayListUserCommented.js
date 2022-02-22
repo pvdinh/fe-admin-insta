@@ -10,7 +10,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import {useEffect, useState} from "react";
+import {Icon} from "@iconify/react";
+import trash2Outline from "@iconify/icons-eva/trash-2-outline";
+import {ListItemIcon} from "@mui/material";
 import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
+import DialogDeleteComment from "./DialogDeleteComment";
 
 
 const style = {
@@ -31,11 +35,13 @@ export default function ModalDisplayListUserCommented(props) {
 
     const [visible,setVisible] = useState(false)
     const [uIdClick,setUIdClick] = useState("")
+    const [visibleDialogDeleteComment,setVisibleDialogDeleteComment] = useState(false)
+    const [commentDelete,setCommentDelete] = useState({})
 
 
     useEffect(()=>{
-        console.log(props)
-    })
+
+    },props.list)
 
     const handleClose = () => {
         props.setVisible()
@@ -45,6 +51,14 @@ export default function ModalDisplayListUserCommented(props) {
         if(uIdClick !== ""){
             return(
                 <ModalUserAccountSetting uId={uIdClick} visible={visible} setVisible={()=>{setVisible(false)}} />
+            )
+        }
+    }
+
+    const showDialogDeleteComment = () =>{
+        if(visibleDialogDeleteComment){
+            return(
+                <DialogDeleteComment reload={()=>{props.reload()}} comment={commentDelete} visible={visibleDialogDeleteComment} setVisible={()=>{setVisibleDialogDeleteComment(false)}} />
             )
         }
     }
@@ -87,6 +101,9 @@ export default function ModalDisplayListUserCommented(props) {
                                                     </>
                                                 }
                                             />
+                                            <ListItemIcon>
+                                                <Icon icon={trash2Outline} width={24} height={24} onClick={()=>{setCommentDelete(value.comment);setVisibleDialogDeleteComment(true)}} />
+                                            </ListItemIcon>
                                         </ListItem>
                                         <Divider variant="inset" component="li" />
                                     </div>
@@ -98,6 +115,9 @@ export default function ModalDisplayListUserCommented(props) {
             </Modal>
             {
                 showModalUserAccountSetting()
+            }
+            {
+                showDialogDeleteComment()
             }
         </div>
     );

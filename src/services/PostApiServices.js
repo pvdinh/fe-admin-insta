@@ -44,3 +44,8 @@ export const getPostBlockByPostId = (pId) =>{
     const postRequest = new PostRequest()
     return postRequest.getPostBlockByPostId(pId)
 }
+
+export const deleteComment = (id) =>{
+    const postRequest = new PostRequest()
+    return postRequest.deleteComment(id)
+}
