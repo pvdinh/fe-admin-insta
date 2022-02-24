@@ -54,6 +54,7 @@ function User(props) {
   const [total, setTotal] = useState(0);
   const [type, setType] = useState(0);
   const [search, setSearch] = useState("")
+  const [valueRangeDate, setValueRangeDate] = React.useState([null, null]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [visibleModalUser,setVisibleModalUser] = useState(false)
@@ -67,7 +68,16 @@ function User(props) {
       props.searchUser(payload, (data) => {
         setTotal(data.total)
       })
-    }else {
+    } else if (type === 2){
+      const payload = {
+        start: Date.parse(valueRangeDate[0]),
+        end: Date.parse(valueRangeDate[1]),
+        page,size:rowsPerPage,
+      }
+      props.filterUserByTime(payload,(data)=>{
+        setTotal(data.total)
+      })
+    } else {
       props.getAllUser({page, size: rowsPerPage}, (data) => {
         setTotal(data.total)
       })
@@ -89,8 +99,26 @@ function User(props) {
   };
 
   const setOnTypeFilerReport = (s, t) => {
-    setSearch(s)
-    setType(t)
+    switch (t) {
+      case 0:{
+        setSearch(s)
+        setType(t)
+        break;
+      }
+      case 1:{
+        setSearch(s)
+        setType(t)
+        break;
+      }
+      case 2:
+      {
+        setValueRangeDate(s)
+        setType(t)
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -216,6 +244,9 @@ function mapDispatchToProps(dispatch) {
     },
     searchUser:(payload,callback)=>{
       dispatch(userAccountActions.action.searchUser(payload,callback))
+    },
+    filterUserByTime: (payload, callback) => {
+      dispatch(userAccountActions.action.filterUserByTime(payload, callback))
     },
   }
 }

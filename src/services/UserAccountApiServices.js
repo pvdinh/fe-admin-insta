@@ -14,3 +14,8 @@ export const searchUser = (payload) =>{
     const userAccountRequest = new UserAccountRequest()
     return userAccountRequest.searchUser(payload)
 }
+
+export const filterUserByTime = (payload) =>{
+    const userAccountRequest = new UserAccountRequest()
+    return userAccountRequest.filterUserByTime(payload)
+}

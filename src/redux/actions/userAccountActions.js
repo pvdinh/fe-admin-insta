@@ -4,6 +4,8 @@ const type = {
     GET_ALL_USER_SUCCESS: "GET_ALL_USER_SUCCESS",
     SEARCH_USER: "SEARCH_USER",
     SEARCH_USER_SUCCESS: "SEARCH_USER_SUCCESS",
+    FILTER_USER_BY_TIME: "FILTER_USER_BY_TIME",
+    FILTER_USER_BY_TIME_SUCCESS: "FILTER_USER_BY_TIME_SUCCESS",
 }
 const action = {
     getUserAccountSettingById: (uId, callback) => ({
@@ -21,6 +23,10 @@ const action = {
         payload,
         callback,
     }),
-
+    filterUserByTime: (payload, callback) => ({
+        type: type.FILTER_USER_BY_TIME,
+        payload,
+        callback,
+    }),
 }
 export default {type, action}
