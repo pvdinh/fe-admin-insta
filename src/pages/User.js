@@ -94,6 +94,13 @@ function User(props) {
     })
   }, [])
 
+  const reload = () =>{
+    props.getAllUser({page, size: rowsPerPage}, (data) => {
+      console.log("XXX")
+      setTotal(data.total)
+    })
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -199,7 +206,7 @@ function User(props) {
                           {/* </TableCell> */}
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu reload={()=>{reload()}} idUser = {id} />
                           </TableCell>
                         </TableRow>
                       );

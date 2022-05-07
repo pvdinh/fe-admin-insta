@@ -19,3 +19,8 @@ export const filterUserByTime = (payload) =>{
     const userAccountRequest = new UserAccountRequest()
     return userAccountRequest.filterUserByTime(payload)
 }
+
+export const deleteUser = (idUser) =>{
+    const userAccountRequest = new UserAccountRequest()
+    return userAccountRequest.deleteUser(idUser)
+}

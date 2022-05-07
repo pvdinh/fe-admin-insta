@@ -1,6 +1,7 @@
 import {all, call, put, takeEvery} from "@redux-saga/core/effects";
 import userAccountActions from "../actions/userAccountActions";
 import {
+    deleteUser,
     filterUserByTime,
     getAllUser,
     getUserAccountSettingById,
@@ -60,11 +61,24 @@ function *filterUserByTime_saga(action) {
     }
 }
 
+// eslint-disable-next-line camelcase
+function *deleteUser_saga(action) {
+    try {
+        const response = yield call(deleteUser,action.id)
+        if(response.statusCode === 200){
+            yield action.callback(response)
+        }
+    }catch (e) {
+        console.log('err',e)
+    }
+}
+
 function *listen() {
     yield takeEvery(userAccountActions.type.GET_USER_ACCOUNT_SETTING_BY_ID,getUserAccountSettingById_saga)
     yield takeEvery(userAccountActions.type.GET_ALL_USER,getAllUser_saga)
     yield takeEvery(userAccountActions.type.SEARCH_USER,searchUser_saga)
     yield takeEvery(userAccountActions.type.FILTER_USER_BY_TIME,filterUserByTime_saga)
+    yield takeEvery(userAccountActions.type.DELETE_USER,deleteUser_saga)
 }
 function *userAccountSaga() {
     yield all([listen()])

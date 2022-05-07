@@ -26,6 +26,7 @@ function DashboardApp(props) {
 
     useEffect(() => {
       axiosJwt.get(`${BASE_URL}/api/v1/user-account-setting/get`).then((res) => {
+          console.log(res)
         props.getStatisticalOverview((data)=>{
           setStatisticalOverview(data)
         })

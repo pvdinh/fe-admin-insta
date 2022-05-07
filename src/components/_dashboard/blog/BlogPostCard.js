@@ -102,6 +102,8 @@ function BlogPostCard(props) {
     useEffect(() => {
         props.getPostInformationFromPId(props.pId, (data) => {
             setPost(data.post)
+            console.log(data.post)
+            console.log(props.pId)
             setUserAccountSetting(data.userAccountSetting)
         })
 
@@ -152,166 +154,173 @@ function BlogPostCard(props) {
     }
 
     return (
-    <Grid item xs={12} sm={6} md={3}>
-      <Card>
-        <Grid item xs={12}>
-          <Card sx={{position: 'relative'}}>
-              {
-                  post.type === 'image' ?
-                      <CardMediaStyle
-                      >
-                          <SvgIconStyle
-                              color="paper"
-                              src="/static/icons/shape-avatar.svg"
-                              sx={{
-                                  width: 80,
-                                  height: 36,
-                                  zIndex: 9,
-                                  bottom: -15,
-                                  position: 'absolute',
-                              }}
-                          />
-                          <LazyLoad>
-                              <AvatarStyle
-                                  alt="img"
-                                  src={userAccountSetting.profilePhoto}
-                              />
-                          </LazyLoad>
-                          <LazyLoad>
-                              <CoverImgStyle style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}} alt='image' src={post.imagePath}/>
-                          </LazyLoad>
+        <>
+            {
+                post ?
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Card>
+                            <Grid item xs={12}>
+                                <Card sx={{position: 'relative'}}>
+                                    {
+                                        post.type === 'image' ?
+                                            <CardMediaStyle
+                                            >
+                                                <SvgIconStyle
+                                                    color="paper"
+                                                    src="/static/icons/shape-avatar.svg"
+                                                    sx={{
+                                                        width: 80,
+                                                        height: 36,
+                                                        zIndex: 9,
+                                                        bottom: -15,
+                                                        position: 'absolute',
+                                                    }}
+                                                />
+                                                <LazyLoad>
+                                                    <AvatarStyle
+                                                        alt="img"
+                                                        src={userAccountSetting.profilePhoto}
+                                                    />
+                                                </LazyLoad>
+                                                <LazyLoad>
+                                                    <CoverImgStyle style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}} alt='image' src={post.imagePath}/>
+                                                </LazyLoad>
 
-                      </CardMediaStyle>
-                      :
-                      <CardMediaVideoStyle
-                      >
-                          <SvgIconStyle
-                              color="paper"
-                              src="/static/icons/shape-avatar.svg"
-                              sx={{
-                                  width: 80,
-                                  height: 36,
-                                  zIndex: 9,
-                                  bottom: -15,
-                                  position: 'absolute',
-                              }}
-                          />
-                          <LazyLoad>
-                              <AvatarStyle
-                                  alt="img"
-                                  src={userAccountSetting.profilePhoto}
-                              />
-                          </LazyLoad>
-                          <ReactPlayer muted playing height="182px" width="700"
-                                       controls url={post.videoPath}
-                                       light={post.imagePath !== "" ? post.imagePath : ""}
-                          />
-                      </CardMediaVideoStyle>
+                                            </CardMediaStyle>
+                                            :
+                                            <CardMediaVideoStyle
+                                            >
+                                                <SvgIconStyle
+                                                    color="paper"
+                                                    src="/static/icons/shape-avatar.svg"
+                                                    sx={{
+                                                        width: 80,
+                                                        height: 36,
+                                                        zIndex: 9,
+                                                        bottom: -15,
+                                                        position: 'absolute',
+                                                    }}
+                                                />
+                                                <LazyLoad>
+                                                    <AvatarStyle
+                                                        alt="img"
+                                                        src={userAccountSetting.profilePhoto}
+                                                    />
+                                                </LazyLoad>
+                                                <ReactPlayer muted playing height="182px" width="700"
+                                                             controls url={post.videoPath}
+                                                             light={post.imagePath !== "" ? post.imagePath : ""}
+                                                />
+                                            </CardMediaVideoStyle>
 
-              }
+                                    }
 
 
-              <CardContent
-              >
-                  <TitleStyle
-                      color="inherit"
-                      variant="subtitle2"
-                      underline="none"
-                      style={{cursor:"pointer"}}
-                      onClick={()=>{
-                          setVisibleModalUserAST(true)
-                      }}
-                  >
-                      {userAccountSetting.username}
-                  </TitleStyle>
+                                    <CardContent
+                                    >
+                                        <TitleStyle
+                                            color="inherit"
+                                            variant="subtitle2"
+                                            underline="none"
+                                            style={{cursor:"pointer"}}
+                                            onClick={()=>{
+                                                setVisibleModalUserAST(true)
+                                            }}
+                                        >
+                                            {userAccountSetting.username}
+                                        </TitleStyle>
 
-                  <TitleStyle
-                      color="inherit"
-                      variant="subtitle2"
-                      underline="none"
-                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
-                  >
-                      {post.id !== undefined ? post.id : ""}
-                  </TitleStyle>
+                                        <TitleStyle
+                                            color="inherit"
+                                            variant="subtitle2"
+                                            underline="none"
+                                            style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
+                                        >
+                                            {post.id !== undefined ? post.id : ""}
+                                        </TitleStyle>
 
-                  <Typography
-                      gutterBottom
-                      variant="caption"
-                      sx={{color: 'text.disabled', display: 'block'}}
-                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
-                  >
-                      {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
-                  </Typography>
+                                        <Typography
+                                            gutterBottom
+                                            variant="caption"
+                                            sx={{color: 'text.disabled', display: 'block'}}
+                                            style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
+                                        >
+                                            {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
+                                        </Typography>
 
-                  <TitleStyle
-                      to="#"
-                      color="inherit"
-                      variant="subtitle2"
-                      underline="hover"
-                      component={RouterLink}
-                      style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
-                  >
-                      {post.caption}
-                  </TitleStyle>
+                                        <TitleStyle
+                                            to="#"
+                                            color="inherit"
+                                            variant="subtitle2"
+                                            underline="hover"
+                                            component={RouterLink}
+                                            style={{cursor:"pointer"}} onClick={()=>{setPIdClick(props.pId);setVisibleModalDetailPost(true)}}
+                                        >
+                                            {post.caption}
+                                        </TitleStyle>
 
-                  <InfoStyle>
-                      <Box
-                          sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              ml: 0,
-                          }}
-                          style={{cursor: "pointer"}}
-                          onClick={()=>{setListUser(listUserLikedPost);setType(1);setVisibleModal(true)}}
-                      >
-                          <Box component={Icon} icon={heartFill} sx={{width: 16, height: 16, mr: 0.5}}/>
-                          <Typography variant="caption">{fShortenNumber(listUserLikedPost.length)}</Typography>
-                      </Box>
-                      <Box
-                          sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              ml: 1.5,
-                          }}
-                          style={{cursor: "pointer"}}
-                          onClick={()=>{setVisibleModalComment(true)}}
-                      >
-                          <Box component={Icon} icon={messageCircleFill}
-                               sx={{width: 16, height: 16, mr: 0.5}}/>
-                          <Typography
-                              variant="caption">{fShortenNumber(listComment.length)}</Typography>
-                      </Box>
-                      <Box
-                          sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              ml: 1.5,
-                          }}
-                          style={{cursor: "pointer"}}
-                          onClick={()=>{setListUser(listUserSavedPost);setType(3);setVisibleModal(true)}}
-                      >
-                          <Box component={Icon} icon={bookmarkFill}
-                               sx={{width: 16, height: 16, mr: 0.5}}/>
-                          <Typography variant="caption">{fShortenNumber(listUserSavedPost.length)}</Typography>
-                      </Box>
-                  </InfoStyle>
-              </CardContent>
-          </Card>
-        </Grid>
-      </Card>
-        {
-            showModal()
-        }
-        {
-            showModalComment()
-        }
-        {
-            showModalUserAST()
-        }
-        {
-            showModalDetailPost()
-        }
-    </Grid>
+                                        <InfoStyle>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 0,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={()=>{setListUser(listUserLikedPost);setType(1);setVisibleModal(true)}}
+                                            >
+                                                <Box component={Icon} icon={heartFill} sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography variant="caption">{fShortenNumber(listUserLikedPost.length)}</Typography>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 1.5,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={()=>{setVisibleModalComment(true)}}
+                                            >
+                                                <Box component={Icon} icon={messageCircleFill}
+                                                     sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography
+                                                    variant="caption">{fShortenNumber(listComment.length)}</Typography>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 1.5,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={()=>{setListUser(listUserSavedPost);setType(3);setVisibleModal(true)}}
+                                            >
+                                                <Box component={Icon} icon={bookmarkFill}
+                                                     sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography variant="caption">{fShortenNumber(listUserSavedPost.length)}</Typography>
+                                            </Box>
+                                        </InfoStyle>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Card>
+                        {
+                            showModal()
+                        }
+                        {
+                            showModalComment()
+                        }
+                        {
+                            showModalUserAST()
+                        }
+                        {
+                            showModalDetailPost()
+                        }
+                    </Grid>
+                    :
+                    null
+            }
+        </>
   );
 }
 

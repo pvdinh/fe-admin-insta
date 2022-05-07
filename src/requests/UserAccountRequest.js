@@ -20,5 +20,10 @@ class UserAccountRequest extends BaseRequest{
         const url = `admin/manage-user/filter?start=${payload.start}&end=${payload.end}&page=${payload.page}&size=${payload.size}`
         return this.get(url)
     }
+
+    deleteUser(idUser){
+        const url = `admin/manage-user/${idUser}/delete`
+        return this.delete(url)
+    }
 }
 export default UserAccountRequest

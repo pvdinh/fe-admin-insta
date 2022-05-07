@@ -6,6 +6,8 @@ const type = {
     SEARCH_USER_SUCCESS: "SEARCH_USER_SUCCESS",
     FILTER_USER_BY_TIME: "FILTER_USER_BY_TIME",
     FILTER_USER_BY_TIME_SUCCESS: "FILTER_USER_BY_TIME_SUCCESS",
+    DELETE_USER: "DELETE_USER",
+    DELETE_USER_SUCCESS: "DELETE_USER_SUCCESS",
 }
 const action = {
     getUserAccountSettingById: (uId, callback) => ({
@@ -26,6 +28,11 @@ const action = {
     filterUserByTime: (payload, callback) => ({
         type: type.FILTER_USER_BY_TIME,
         payload,
+        callback,
+    }),
+    deleteUser: (idUser, callback) => ({
+        type: type.DELETE_USER,
+        id:idUser,
         callback,
     }),
 }
