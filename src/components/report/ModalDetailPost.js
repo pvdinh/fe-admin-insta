@@ -23,6 +23,7 @@ import ModalDisplayListUserCommented from "../Modal/ModalDisplayListUserCommente
 import ModalUserAccountSetting from "../feedback/ModalUserAccountSetting";
 import DialogBlockPost from "../post/DialogBlockPost";
 import DialogUnBlockPost from "../post/DialogUnBlockPost";
+import DialogDeletePost from "../post/DialogDeletePost";
 
 const CardMediaStyle = styled('div')({
     position: 'relative',
@@ -77,89 +78,123 @@ const style = {
 
 function ModalDetailPost(props) {
 
-    const [post, setPost] = useState({})
+    const [post, setPost] = useState(null)
     const [userAccountSetting, setUserAccountSetting] = useState({})
     const [listComment, setListComment] = useState([])
     const [listUserSavedPost, setListUserSavedPost] = useState([])
     const [listUserLikedPost, setListUserLikedPost] = useState([])
-    const [listUser,setListUser] = useState([])
-    const [type,setType] = useState([])
-    const [postBlock,setPostBlock] = useState({})
+    const [listUser, setListUser] = useState([])
+    const [type, setType] = useState([])
+    const [postBlock, setPostBlock] = useState({})
 
-    const [visibleModal,setVisibleModal] = useState(false)
-    const [visibleModalComment,setVisibleModalComment] = useState(false)
-    const [visibleModalUserAST,setVisibleModalUserAST] = useState(false)
-    const [visibleModalBlockPost,setVisibleModalBlockPost] = useState(false)
-    const [visibleModalUnBlockPost,setVisibleModalUnBlockPost] = useState(false)
+    const [visibleModal, setVisibleModal] = useState(false)
+    const [visibleModalComment, setVisibleModalComment] = useState(false)
+    const [visibleModalUserAST, setVisibleModalUserAST] = useState(false)
+    const [visibleModalBlockPost, setVisibleModalBlockPost] = useState(false)
+    const [visibleModalDeletePost, setVisibleModalDeletePost] = useState(false)
+    const [visibleModalUnBlockPost, setVisibleModalUnBlockPost] = useState(false)
 
     useEffect(() => {
-        props.getPostInformationFromPId(props.pId, (data) => {
-            setPost(data.post)
-            setUserAccountSetting(data.userAccountSetting)
-        })
+        if (props.pId) {
+            props.getPostInformationFromPId(props.pId, (data) => {
+                setPost(data.post)
+                setUserAccountSetting(data.userAccountSetting)
+            })
 
-        props.getAllCommentInPost(props.pId, (data) => {
-            setListComment(data)
-        })
+            props.getAllCommentInPost(props.pId, (data) => {
+                setListComment(data)
+            })
 
-        props.getAllUserSavedPost(props.pId, (data) => {
-            setListUserSavedPost(data)
-        })
+            props.getAllUserSavedPost(props.pId, (data) => {
+                setListUserSavedPost(data)
+            })
 
-        props.getAllUserLikedPost(props.pId, (data) => {
-            setListUserLikedPost(data)
-        })
+            props.getAllUserLikedPost(props.pId, (data) => {
+                setListUserLikedPost(data)
+            })
 
-        props.getPostBlockByPostId(props.pId,(data)=>{
-            if (data.data !== null){
-                console.log(data.data)
-                setPostBlock(data.data)
-            }else setPostBlock(null)
-        })
+            props.getPostBlockByPostId(props.pId, (data) => {
+                if (data.data !== null) {
+                    console.log(data.data)
+                    setPostBlock(data.data)
+                } else setPostBlock(null)
+            })
+        }
     }, [props.pId])
 
-    const showModal = () =>{
-        if(visibleModal){
-            return(
-                <ModalDisplayListUser list={listUser} type={type} visible={visibleModal} setVisible={()=>{setVisibleModal(false)}}  />
+    const showModal = () => {
+        if (visibleModal) {
+            return (
+                <ModalDisplayListUser list={listUser} type={type} visible={visibleModal} setVisible={() => {
+                    setVisibleModal(false)
+                }}/>
             )
         }
     }
 
 
-    const showModalComment = () =>{
-        if(visibleModalComment){
-            return(
-                <ModalDisplayListUserCommented reload={()=>{reload()}} list={listComment} visible={visibleModalComment} setVisible={()=>{setVisibleModalComment(false)}}  />
+    const showModalComment = () => {
+        if (visibleModalComment) {
+            return (
+                <ModalDisplayListUserCommented reload={() => {
+                    reload()
+                }} list={listComment} visible={visibleModalComment} setVisible={() => {
+                    setVisibleModalComment(false)
+                }}/>
             )
         }
     }
 
-    const showModalUserAST = () =>{
-        if(visibleModalUserAST){
-            return(
-                <ModalUserAccountSetting uId={userAccountSetting.id} visible={visibleModalUserAST} setVisible={()=>{setVisibleModalUserAST(false)}} />
+    const showModalUserAST = () => {
+        if (visibleModalUserAST) {
+            return (
+                <ModalUserAccountSetting uId={userAccountSetting.id} visible={visibleModalUserAST} setVisible={() => {
+                    setVisibleModalUserAST(false)
+                }}/>
             )
         }
     }
 
-    const showModalBlockPost = () =>{
-        if(visibleModalBlockPost){
-            return(
-                <DialogBlockPost reload={()=>{reload();props.reload()}} pId={props.pId} visible={visibleModalBlockPost} setVisible={()=>{setVisibleModalBlockPost(false)}} />
+    const showModalBlockPost = () => {
+        if (visibleModalBlockPost) {
+            return (
+                <DialogBlockPost reload={() => {
+                    reload();
+                    props.reload()
+                }} pId={props.pId} visible={visibleModalBlockPost} setVisible={() => {
+                    setVisibleModalBlockPost(false)
+                }}/>
             )
         }
     }
 
-    const showModalUnBlockPost = () =>{
-        if(visibleModalUnBlockPost){
-            return(
-                <DialogUnBlockPost reload={()=>{reload();props.reload()}} pId={props.pId} visible={visibleModalUnBlockPost} setVisible={()=>{setVisibleModalUnBlockPost(false)}} />
+    const showModalDeletePost = () => {
+        if (visibleModalDeletePost) {
+            return (
+                <DialogDeletePost reload={() => {
+                    reload();
+                    props.reload()
+                }} pId={props.pId} visible={visibleModalDeletePost} setVisible={() => {
+                    setVisibleModalDeletePost(false)
+                }}/>
             )
         }
     }
 
-    const reload = () =>{
+    const showModalUnBlockPost = () => {
+        if (visibleModalUnBlockPost) {
+            return (
+                <DialogUnBlockPost reload={() => {
+                    reload();
+                    props.reload()
+                }} pId={props.pId} visible={visibleModalUnBlockPost} setVisible={() => {
+                    setVisibleModalUnBlockPost(false)
+                }}/>
+            )
+        }
+    }
+
+    const reload = () => {
         props.getPostInformationFromPId(props.pId, (data) => {
             setPost(data.post)
             setUserAccountSetting(data.userAccountSetting)
@@ -177,194 +212,235 @@ function ModalDetailPost(props) {
             setListUserLikedPost(data)
         })
 
-        props.getPostBlockByPostId(props.pId,(data)=>{
-            if (data.data !== null){
+        props.getPostBlockByPostId(props.pId, (data) => {
+            if (data.data !== null) {
                 setPostBlock(data.data)
-            }else setPostBlock(null)
+            } else setPostBlock(null)
         })
     }
 
     return (
-        <div>
-            <Modal open={props.visible} onClose={() => {
-                props.setVisible()
-            }}>
-                <Card sx={style}>
-                    <Grid item xs={12}>
-                        <Card sx={{position: 'relative'}}>
+        <>
+            { post ?
+                <div>
+                    <Modal open={props.visible} onClose={() => {
+                        props.setVisible()
+                    }}>
+                        <Card sx={style}>
+                            <Grid item xs={12}>
+                                <Card sx={{position: 'relative'}}>
 
-                            {
-                                post.type === 'image' ?
-                                    <CardMediaStyle
+                                    {
+                                        post.type === 'image' ?
+                                            <CardMediaStyle
+                                            >
+                                                <SvgIconStyle
+                                                    color="paper"
+                                                    src="/static/icons/shape-avatar.svg"
+                                                    sx={{
+                                                        width: 80,
+                                                        height: 36,
+                                                        zIndex: 9,
+                                                        bottom: -15,
+                                                        position: 'absolute',
+                                                    }}
+                                                />
+                                                <AvatarStyle
+                                                    alt="img"
+                                                    src={userAccountSetting.profilePhoto}
+                                                />
+                                                <CoverImgStyle alt='image' src={post.imagePath}/>
+
+
+                                            </CardMediaStyle>
+                                            :
+                                            <CardMediaVideoStyle
+                                            >
+                                                <SvgIconStyle
+                                                    color="paper"
+                                                    src="/static/icons/shape-avatar.svg"
+                                                    sx={{
+                                                        width: 80,
+                                                        height: 36,
+                                                        zIndex: 9,
+                                                        bottom: -15,
+                                                        position: 'absolute',
+                                                    }}
+                                                />
+                                                <AvatarStyle
+                                                    alt="img"
+                                                    src={userAccountSetting.profilePhoto}
+                                                />
+                                                <ReactPlayer muted playing height="450px" width="700"
+                                                             controls url={post.videoPath}
+                                                             light={post.imagePath !== "" ? post.imagePath : ""}
+                                                />
+                                            </CardMediaVideoStyle>
+
+                                    }
+
+
+                                    <CardContent
                                     >
-                                        <SvgIconStyle
-                                            color="paper"
-                                            src="/static/icons/shape-avatar.svg"
-                                            sx={{
-                                                width: 80,
-                                                height: 36,
-                                                zIndex: 9,
-                                                bottom: -15,
-                                                position: 'absolute',
+                                        <TitleStyle
+                                            color="inherit"
+                                            variant="subtitle2"
+                                            underline="none"
+                                            style={{cursor: "pointer"}}
+                                            onClick={() => {
+                                                setVisibleModalUserAST(true)
                                             }}
-                                        />
-                                        <AvatarStyle
-                                            alt="img"
-                                            src={userAccountSetting.profilePhoto}
-                                        />
-                                        <CoverImgStyle alt='image' src={post.imagePath}/>
-
-
-                                    </CardMediaStyle>
-                                    :
-                                    <CardMediaVideoStyle
-                                    >
-                                        <SvgIconStyle
-                                            color="paper"
-                                            src="/static/icons/shape-avatar.svg"
-                                            sx={{
-                                                width: 80,
-                                                height: 36,
-                                                zIndex: 9,
-                                                bottom: -15,
-                                                position: 'absolute',
-                                            }}
-                                        />
-                                        <AvatarStyle
-                                            alt="img"
-                                            src={userAccountSetting.profilePhoto}
-                                        />
-                                        <ReactPlayer muted playing height="450px" width="700"
-                                                     controls url={post.videoPath}
-                                                     light={post.imagePath !== "" ? post.imagePath : ""}
-                                        />
-                                    </CardMediaVideoStyle>
-
-                            }
-
-
-                            <CardContent
-                            >
-                                <TitleStyle
-                                    color="inherit"
-                                    variant="subtitle2"
-                                    underline="none"
-                                    style={{cursor:"pointer"}}
-                                    onClick={()=>{
-                                        setVisibleModalUserAST(true)
-                                    }}
-                                >
-                                    {userAccountSetting.username}
-                                </TitleStyle>
-
-                                <TitleStyle
-                                    color="inherit"
-                                    variant="subtitle2"
-                                    underline="none"
-                                >
-                                    {post.id !== undefined ? post.id : ""}
-                                </TitleStyle>
-
-                                <Typography
-                                    gutterBottom
-                                    variant="caption"
-                                    sx={{color: 'text.disabled', display: 'block'}}
-                                >
-                                    {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
-                                </Typography>
-
-                                <TitleStyle
-                                    color="inherit"
-                                    variant="subtitle2"
-                                >
-                                    {post.caption}
-                                </TitleStyle>
-
-                                {
-                                    postBlock !== null ?
-                                        <LoadingButton
-                                            size="large"
-                                            type="submit"
-                                            variant="contained"
-                                            style={{background:"#EE1C2F"}}
-                                            onClick={()=>{setVisibleModalUnBlockPost(true)}}
                                         >
-                                            Block from - {new Date(postBlock.dateCreated).toLocaleDateString()} {new Date(postBlock.dateCreated).toLocaleTimeString()}
-                                        </LoadingButton>
-                                        :
-                                        <LoadingButton
-                                            size="large"
-                                            type="submit"
-                                            variant="contained"
-                                            style={{background:"#EE1C2F"}}
-                                            onClick={()=>{setVisibleModalBlockPost(true)}}
-                                        >
-                                            Block
-                                        </LoadingButton>
-                                }
+                                            {userAccountSetting.username}
+                                        </TitleStyle>
 
-                                <InfoStyle>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            ml: 0,
-                                        }}
-                                        style={{cursor: "pointer"}}
-                                        onClick={()=>{setListUser(listUserLikedPost);setType(1);setVisibleModal(true)}}
-                                    >
-                                        <Box component={Icon} icon={heartFill} sx={{width: 16, height: 16, mr: 0.5}}/>
-                                        <Typography variant="caption">{fShortenNumber(listUserLikedPost.length)}</Typography>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            ml: 1.5,
-                                        }}
-                                        style={{cursor: "pointer"}}
-                                        onClick={()=>{setListUser(listComment);setVisibleModalComment(true)}}
-                                    >
-                                        <Box component={Icon} icon={messageCircleFill}
-                                             sx={{width: 16, height: 16, mr: 0.5}}/>
+                                        <TitleStyle
+                                            color="inherit"
+                                            variant="subtitle2"
+                                            underline="none"
+                                        >
+                                            {post.id !== undefined ? post.id : ""}
+                                        </TitleStyle>
+
                                         <Typography
-                                            variant="caption">{fShortenNumber(listComment.length)}</Typography>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            ml: 1.5,
-                                        }}
-                                        style={{cursor: "pointer"}}
-                                        onClick={()=>{setListUser(listUserSavedPost);setType(3);setVisibleModal(true)}}
-                                    >
-                                        <Box component={Icon} icon={bookmarkFill}
-                                             sx={{width: 16, height: 16, mr: 0.5}}/>
-                                        <Typography variant="caption">{fShortenNumber(listUserSavedPost.length)}</Typography>
-                                    </Box>
-                                </InfoStyle>
-                            </CardContent>
+                                            gutterBottom
+                                            variant="caption"
+                                            sx={{color: 'text.disabled', display: 'block'}}
+                                        >
+                                            {fDate(post.dateCreated !== undefined ? post.dateCreated : new Date().getTime())}
+                                        </Typography>
+
+                                        <TitleStyle
+                                            color="inherit"
+                                            variant="subtitle2"
+                                        >
+                                            {post.caption}
+                                        </TitleStyle>
+
+                                        {
+                                            postBlock !== null ?
+                                                <LoadingButton
+                                                    size="large"
+                                                    type="submit"
+                                                    variant="contained"
+                                                    style={{background: "#EE1C2F"}}
+                                                    onClick={() => {
+                                                        setVisibleModalUnBlockPost(true)
+                                                    }}
+                                                >
+                                                    Block from
+                                                    - {new Date(postBlock.dateCreated).toLocaleDateString()} {new Date(postBlock.dateCreated).toLocaleTimeString()}
+                                                </LoadingButton>
+                                                :
+                                                <LoadingButton
+                                                    size="large"
+                                                    type="submit"
+                                                    variant="contained"
+                                                    style={{background: "#EE1C2F"}}
+                                                    onClick={() => {
+                                                        setVisibleModalBlockPost(true)
+                                                    }}
+                                                >
+                                                    Block
+                                                </LoadingButton>
+                                        }
+
+
+                                        <LoadingButton
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            style={{background: "#EE1C2F", marginLeft: "20px"}}
+                                            onClick={() => {
+                                                setVisibleModalDeletePost(true)
+                                            }}
+                                        >
+                                            Delete
+                                        </LoadingButton>
+
+                                        <InfoStyle>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 0,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={() => {
+                                                    setListUser(listUserLikedPost);
+                                                    setType(1);
+                                                    setVisibleModal(true)
+                                                }}
+                                            >
+                                                <Box component={Icon} icon={heartFill}
+                                                     sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography
+                                                    variant="caption">{fShortenNumber(listUserLikedPost.length)}</Typography>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 1.5,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={() => {
+                                                    setListUser(listComment);
+                                                    setVisibleModalComment(true)
+                                                }}
+                                            >
+                                                <Box component={Icon} icon={messageCircleFill}
+                                                     sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography
+                                                    variant="caption">{fShortenNumber(listComment.length)}</Typography>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    ml: 1.5,
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                                onClick={() => {
+                                                    setListUser(listUserSavedPost);
+                                                    setType(3);
+                                                    setVisibleModal(true)
+                                                }}
+                                            >
+                                                <Box component={Icon} icon={bookmarkFill}
+                                                     sx={{width: 16, height: 16, mr: 0.5}}/>
+                                                <Typography
+                                                    variant="caption">{fShortenNumber(listUserSavedPost.length)}</Typography>
+                                            </Box>
+                                        </InfoStyle>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Card>
-                    </Grid>
-                </Card>
-            </Modal>
-            {
-                showModal()
+                    </Modal>
+                    {
+                        showModal()
+                    }
+                    {
+                        showModalComment()
+                    }
+                    {
+                        showModalUserAST()
+                    }
+                    {
+                        showModalBlockPost()
+                    }
+                    {
+                        showModalDeletePost()
+                    }
+                    {
+                        showModalUnBlockPost()
+                    }
+                </div>
+                :
+                null
             }
-            {
-                showModalComment()
-            }
-            {
-                showModalUserAST()
-            }
-            {
-                showModalBlockPost()
-            }
-            {
-                showModalUnBlockPost()
-            }
-        </div>
+        </>
     )
 }
 

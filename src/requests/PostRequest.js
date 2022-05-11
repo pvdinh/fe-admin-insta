@@ -50,5 +50,10 @@ class PostRequest extends BaseRequest{
         const url = `admin/manage-post/${id}/delete-comment`
         return this.delete(url)
     }
+
+    deletePost(id){
+        const url = `admin/manage-post/${id}/delete`
+        return this.delete(url)
+    }
 }
 export default PostRequest

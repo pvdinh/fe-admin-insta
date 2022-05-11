@@ -49,3 +49,8 @@ export const deleteComment = (id) =>{
     const postRequest = new PostRequest()
     return postRequest.deleteComment(id)
 }
+
+export const deletePost = (id) =>{
+    const postRequest = new PostRequest()
+    return postRequest.deletePost(id)
+}

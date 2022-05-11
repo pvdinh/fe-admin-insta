@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {connect} from "react-redux";
 import postActions from "../../redux/actions/postActions";
 
-function DialogBlockPost(props) {
+function DialogDeletePost(props) {
 
     return (
         <div>
@@ -21,20 +21,20 @@ function DialogBlockPost(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Block?
+                    Delete?
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you want to block this post?
+                        Are you want to delete this post?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {
-                        props.blockPost(props.pId,(data)=>{
+                        props.deletePost(props.pId,(data)=>{
                             console.log(data)
-                            if(data.message === "success"){
+                            if(data.data === "success"){
                                 props.setVisible()
-                                alert("Block success!")
+                                alert("Delete success!")
                                 props.reload()
                             }
                         })
@@ -56,10 +56,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        blockPost: (pId, callback) => {
-            dispatch(postActions.action.blockPost(pId, callback))
+        deletePost: (pId, callback) => {
+            dispatch(postActions.action.deletePost(pId, callback))
         },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DialogBlockPost)
+export default connect(mapStateToProps, mapDispatchToProps)(DialogDeletePost)

@@ -83,7 +83,7 @@ const style = {
 // ----------------------------------------------------------------------
 function BlogPostCard(props) {
 
-    const [post, setPost] = useState({})
+    const [post, setPost] = useState(null)
     const [userAccountSetting, setUserAccountSetting] = useState({})
     const [listComment, setListComment] = useState([])
     const [listUserSavedPost, setListUserSavedPost] = useState([])
@@ -100,24 +100,26 @@ function BlogPostCard(props) {
     const [visibleModalDetailPost, setVisibleModalDetailPost] = useState(false)
 
     useEffect(() => {
-        props.getPostInformationFromPId(props.pId, (data) => {
-            setPost(data.post)
-            console.log(data.post)
-            console.log(props.pId)
-            setUserAccountSetting(data.userAccountSetting)
-        })
+        if(props.pId){
+            props.getPostInformationFromPId(props.pId, (data) => {
+                setPost(data.post)
+                console.log(data.post)
+                console.log(props.pId)
+                setUserAccountSetting(data.userAccountSetting)
+            })
 
-        props.getAllCommentInPost(props.pId, (data) => {
-            setListComment(data)
-        })
+            props.getAllCommentInPost(props.pId, (data) => {
+                setListComment(data)
+            })
 
-        props.getAllUserSavedPost(props.pId, (data) => {
-            setListUserSavedPost(data)
-        })
+            props.getAllUserSavedPost(props.pId, (data) => {
+                setListUserSavedPost(data)
+            })
 
-        props.getAllUserLikedPost(props.pId, (data) => {
-            setListUserLikedPost(data)
-        })
+            props.getAllUserLikedPost(props.pId, (data) => {
+                setListUserLikedPost(data)
+            })
+        }
     }, [props.pId,reload])
 
     const showModal = () =>{
