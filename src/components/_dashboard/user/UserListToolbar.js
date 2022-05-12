@@ -68,18 +68,6 @@ function UserListToolbar(props) {
         }
     }
 
-    const onFilterByTime = () => {
-        const payload = {
-            start: Date.parse(valueRangeDate[0]),
-            end: Date.parse(valueRangeDate[1]),
-            page: props.page, size: props.size,
-        }
-        props.filterUserByTime(payload, (data) => {
-            props.resultTotalSearch(data.total)
-            props.setOnTypeFilerReport(valueRangeDate, 2)
-        })
-    }
-
     const reset = () => {
         props.getAllUser({page: 0, size: props.size}, (data) => {
             props.resultTotalSearch(data.total)
@@ -101,38 +89,6 @@ function UserListToolbar(props) {
                     </InputAdornment>
                 }
             />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <div style={{display: "flex"}}>
-                    <DateRangePicker
-                        calendars={1}
-                        value={valueRangeDate}
-                        onChange={(newValue) => {
-                            setValueRangeDate(newValue);
-                            if (newValue[0] !== null && newValue[1] !== null) {
-                                setValueRangeDate(newValue)
-                            }
-                        }}
-                        renderInput={(startProps, endProps) => (
-                            <>
-                                <TextField {...startProps} />
-                                <Box sx={{mx: 2}}> to </Box>
-                                <TextField {...endProps} />
-                            </>
-                        )}
-                    />
-                    <Button variant="contained" style={{marginLeft: "10px"}} onClick={() => {
-                        onFilterByTime()
-                    }}>
-                        Search
-                    </Button>
-                    <Button variant="contained" style={{marginLeft: "10px", width: "20px"}} onClick={() => {
-                        setValueRangeDate([null, null])
-                        reset()
-                    }}>
-                        <Icon icon={closeOutline} fontSize="large"/>
-                    </Button>
-                </div>
-            </LocalizationProvider>
         </RootStyle>
     );
 }
@@ -148,9 +104,6 @@ function mapDispatchToProps(dispatch) {
         },
         searchUser: (payload, callback) => {
             dispatch(userAccountActions.action.searchUser(payload, callback))
-        },
-        filterUserByTime: (payload, callback) => {
-            dispatch(userAccountActions.action.filterUserByTime(payload, callback))
         },
     }
 }

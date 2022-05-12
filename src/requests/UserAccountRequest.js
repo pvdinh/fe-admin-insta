@@ -17,7 +17,7 @@ class UserAccountRequest extends BaseRequest{
     }
 
     filterUserByTime(payload){
-        const url = `admin/manage-user/filter?start=${payload.start}&end=${payload.end}&page=${payload.page}&size=${payload.size}`
+        const url = `admin/manage-user/filter?start=${payload.start}&end=${payload.end}&phone=${payload.phone}&email=${payload.email}&page=${payload.page}&size=${payload.size}`
         return this.get(url)
     }
 
